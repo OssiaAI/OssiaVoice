@@ -128,3 +128,23 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Others
+pnpm-debug.log*
+node_modules
+.DS_Store
+dist-ssr
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
