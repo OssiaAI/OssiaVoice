@@ -72,6 +72,7 @@ function updateWordSuggestionColors() {
 
 #tabs {
   flex-grow: 0;
+  margin: 5px;
 }
 
 .word-suggestion-container {

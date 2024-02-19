@@ -10,7 +10,7 @@ const sentence_suggestions = ref([
 </script>
 
 <template>
-  <div id="">
+  <div id="send-message-wrapper">
     <div id="message-input-wrapper">
       <v-text-field
           label="Message"
@@ -32,8 +32,26 @@ const sentence_suggestions = ref([
 
 <style scoped>
 
+#send-message-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  align-content: center;
+}
+
+#message-input-wrapper {
+  margin: 5px auto;
+  width: 95%;
+}
+
+#message-input {
+  width: 100%;
+}
+
 .message-suggestion-container {
   display: flex;
+  flex-grow: 1;
   flex-wrap: wrap;
   align-content: center;
   align-items: center;

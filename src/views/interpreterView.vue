@@ -88,6 +88,8 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
 
 #send-message {
   flex-grow: 1;
+  display: flex;
+  justify-items: stretch;
   background-color: theme.$ossia-light-background-1;
   height: 100%;
 }

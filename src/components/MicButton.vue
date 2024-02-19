@@ -1,26 +1,29 @@
 <script setup>
 import {ref} from "vue";
+import micImg from '@/assets/mic-button/mic.svg'
+import micHoverImg from '@/assets/mic-button/mic-hover.svg'
+import micActiveImg from '@/assets/mic-button/mic-active.svg'
 
 const micActive = ref(false)
-const micBtnImage = ref("/src/assets/mic-button/mic.svg")
+const micBtnImage = ref(micImg)
 
 function micHover() {
   if (micActive.value) return
-  micBtnImage.value = "/src/assets/mic-button/mic-hover.svg"
+  micBtnImage.value = micHoverImg
 }
 
 function micUnhover() {
   if (micActive.value) return
-  micBtnImage.value = "/src/assets/mic-button/mic.svg"
+  micBtnImage.value = micImg
 }
 
 function micClick() {
   micActive.value = !micActive.value
   if (micActive.value) {
-    micBtnImage.value = "/src/assets/mic-button/mic-active.svg"
+    micBtnImage.value = micActiveImg
   }
   else {
-    micBtnImage.value = "/src/assets/mic-button/mic.svg"
+    micBtnImage.value = micImg
   }
 
 }
