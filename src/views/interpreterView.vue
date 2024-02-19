@@ -40,8 +40,7 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
 #top-panel {
   display: flex;
   width: 100%;
-  flex-grow: 0.8;
-  max-height: 450px;
+  max-height: 45vh;
   align-items: stretch;
   border-bottom-width: 1px;
   border-bottom-style: solid;
@@ -53,9 +52,7 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   padding: 10px;
   height: 100%;
   flex-grow: 1;
-  min-width: 120px;
   max-width: 550px;
-  width: 100%;
 }
 
 #message-history {
@@ -66,16 +63,14 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
 
 #bottom-panel {
   display: flex;
-  flex-grow: 1;
   width: 100%;
+  height: 55vh;
+  max-height: 55vh;
 }
 
 #edit-message {
   flex-grow: 1;
-  display: flex;
   background-color: theme.$ossia-light-background-1;
-  height: 100%;
-  max-width: 50%;
 }
 
 #separator {
@@ -92,6 +87,25 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   justify-items: stretch;
   background-color: theme.$ossia-light-background-1;
   height: 100%;
+  min-width: 50%;
+}
+
+@media (max-width: 600px) {
+
+  #bottom-panel {
+    flex-direction: column;
+  }
+
+  #separator {
+    height: 2px;
+    width: 70%;
+  }
+
+  #edit-message {
+    overflow: scroll;
+  }
+
+
 }
 
 </style>

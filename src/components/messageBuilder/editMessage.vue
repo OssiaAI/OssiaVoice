@@ -1,40 +1,8 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
-
-const tab = ref('new')
-const word_suggestions = ref([
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather',
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather',
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather'])
-
-const colours = [
-  '#01b476',
-  '#ef470b',
-  '#00a6ff',
-  '#e56408',
-  '#2e32d7',
-  '#00b600',
-  '#db47e5',
-  '#dea104',
-  '#e7177e',
-];
-
-
-watch(() => word_suggestions, () => {
-  updateWordSuggestionColors();
-})
-onMounted(() => {
-  updateWordSuggestionColors();
-})
-
-function updateWordSuggestionColors() {
-  const divs = document.getElementsByClassName("word-suggestion");
-  let i;
-  for (i = 0; i < divs.length; i++) {
-    let newColor = i % colours.length
-    divs[i].style.backgroundColor = colours[newColor];
-  }
-}
+import BuildSentence from "@/components/messageBuilder/editMessage/buildSentence.vue";
+import {ref} from "vue";
+import EditSentence from "@/components/messageBuilder/editMessage/editSentence.vue";
+const tab = ref('build')
 
 </script>
 
@@ -52,11 +20,9 @@ function updateWordSuggestionColors() {
       </v-tab>
     </v-tabs>
 
-    <div class="word-suggestion-container">
-      <div class="word-suggestion" v-for="(word, index) in word_suggestions" :key="index" tabindex="0">
-        {{ word }}
-      </div>
-    </div>
+    <BuildSentence v-if="tab === 'build'"/>
+    <BuildSentence v-else-if="tab === 'new'"/>
+    <EditSentence v-else-if="tab === 'edit'"/>
 
   </div>
 </template>
@@ -73,26 +39,6 @@ function updateWordSuggestionColors() {
 #tabs {
   flex-grow: 0;
   margin: 5px;
-}
-
-.word-suggestion-container {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 5px 25px;
-}
-
-.word-suggestion {
-  box-sizing: content-box;
-  color: white;
-  width: fit-content;
-  padding: 5px 15px;
-  border-radius: 1.5em;
-  height: 22px;
 }
 
 </style>

@@ -27,9 +27,9 @@ $ossia-text-dark-2: rgba(235, 235, 235, 0.64);
 ////// To share with vuetify components
 $primary: #00b600;
 
-*:focus {
-  border: 5px solid red;
-}
+//*:focus {
+//  border: 5px solid red !important;
+//}
 
 @mixin light-mode {
   background-color: $ossia-white;
