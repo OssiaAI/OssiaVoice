@@ -6,6 +6,7 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      base: '/OssiaVoice/',
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/*'],
       root: fileURLToPath(new URL('./', import.meta.url))
