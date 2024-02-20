@@ -2,27 +2,32 @@
 import BuildSentence from "@/components/messageBuilder/editMessage/buildSentence.vue";
 import {ref} from "vue";
 import EditSentence from "@/components/messageBuilder/editMessage/editSentence.vue";
+
 const tab = ref('build')
 
 </script>
 
 <template>
   <div id="edit-message-container">
-    <v-tabs id="tabs" v-model="tab">
-      <v-tab value="build">
-        <v-icon size="30" icon="mdi-comment-flash-outline"/>
-      </v-tab>
-      <v-tab value="new">
-        <v-icon size="30" icon="mdi-comment-plus-outline"/>
-      </v-tab>
-      <v-tab value="edit">
-        <v-icon size="30" icon="mdi-comment-edit-outline"/>
-      </v-tab>
-    </v-tabs>
+    <div id="tab-group">
+      <v-tabs id="tabs" v-model="tab">
+        <v-tab value="build">
+          <v-icon size="30" icon="mdi-comment-flash-outline"/>
+        </v-tab>
+        <v-tab value="new">
+          <v-icon size="30" icon="mdi-comment-plus-outline"/>
+        </v-tab>
+        <v-tab value="edit">
+          <v-icon size="30" icon="mdi-comment-edit-outline"/>
+        </v-tab>
+      </v-tabs>
+    </div>
 
-    <BuildSentence v-if="tab === 'build'"/>
-    <BuildSentence v-else-if="tab === 'new'"/>
-    <EditSentence v-else-if="tab === 'edit'"/>
+    <div id="edit-controls">
+      <BuildSentence v-if="tab === 'build'"/>
+      <BuildSentence v-else-if="tab === 'new'"/>
+      <EditSentence v-else-if="tab === 'edit'"/>
+    </div>
 
   </div>
 </template>
@@ -33,12 +38,20 @@ const tab = ref('build')
   display: flex;
   height: 100%;
   flex-direction: column;
-  gap: 20px;
+  padding: 5px 0px 1px 0px;
+  gap: 1px;
+}
+
+#edit-controls {
+  display: flex;
+  overflow: auto;
+  flex-grow: 1;
 }
 
 #tabs {
+  height: fit-content;
   flex-grow: 0;
-  margin: 5px;
+  margin: 0;
 }
 
 </style>

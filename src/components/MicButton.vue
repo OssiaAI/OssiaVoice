@@ -45,7 +45,7 @@ function micClick() {
   align-content: center;
   justify-content: center;
   min-height: 180px;
-  min-width: 180px;
+  min-width: 10px;
 }
 
 #mic-btn {

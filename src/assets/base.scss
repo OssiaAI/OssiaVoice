@@ -7,6 +7,8 @@
   font-weight: normal;
 }
 
+html { overflow: auto}
+
 body {
   @include theme.light-mode;
   min-height: 100vh;

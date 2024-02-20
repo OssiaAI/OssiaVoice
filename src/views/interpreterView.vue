@@ -1,7 +1,7 @@
 <script setup>
 import InterlocutorPanel from "@/components/interlocutorPanel.vue";
 import MessageHistory from "@/components/messageHistory.vue";
-import EditMessage from "@/components/messageBuilder/editMessage.vue";
+import MessageBuilder from "@/components/messageBuilder/editMessage.vue";
 import SendMessage from "@/components/messageBuilder/sendMessage.vue";
 </script>
 
@@ -17,7 +17,7 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
     </div>
     <div id="bottom-panel">
       <div id="edit-message" tabindex="0" class="tabbable">
-        <EditMessage/>
+        <MessageBuilder/>
       </div>
       <div id="separator"/>
       <div id="send-message" tabindex="0" class="tabbable">
@@ -47,25 +47,26 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   //border-color: theme.$ossia-divider-light-2;
 }
 
+#bottom-panel {
+  display: flex;
+  width: 100%;
+  height: 55vh;
+  max-height: 55vh;
+}
+
 #interlocutor-panel {
   background: theme.$ossia-light-background-2;
   padding: 10px;
   height: 100%;
-  flex-grow: 1;
+  width: 50%;
+  //flex-grow: 1;
   max-width: 550px;
 }
 
 #message-history {
   background: theme.$ossia-light-background-1;;
   height: 100%;
-  flex-grow: 3;
-}
-
-#bottom-panel {
-  display: flex;
-  width: 100%;
-  height: 55vh;
-  max-height: 55vh;
+  flex-grow: 1;
 }
 
 #edit-message {
@@ -102,9 +103,12 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   }
 
   #edit-message {
-    overflow: scroll;
+    max-height: 50%;
   }
 
+  #separator {
+    display: none;
+  }
 
 }
 

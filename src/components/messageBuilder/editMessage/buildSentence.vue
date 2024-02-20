@@ -61,7 +61,6 @@ function wordClicked (e) {
 @use 'theme';
 
 .word-suggestion-container {
-  flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
