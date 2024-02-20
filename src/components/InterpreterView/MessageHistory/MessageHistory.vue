@@ -1,6 +1,6 @@
 <script setup>
-import MessageBubble from "@/components/messageBubble.vue";
 import {ref} from "vue";
+import MessageBubble from "@/components/InterpreterView/MessageHistory/components/MessageBubble.vue";
 
 const messages = ref([
   {"role": "system", "content": "SystemContext"},

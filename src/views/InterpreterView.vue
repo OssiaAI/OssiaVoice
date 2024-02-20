@@ -1,8 +1,8 @@
 <script setup>
-import InterlocutorPanel from "@/components/interlocutorPanel.vue";
-import MessageHistory from "@/components/messageHistory.vue";
-import MessageBuilder from "@/components/messageBuilder/editMessage.vue";
-import SendMessage from "@/components/messageBuilder/sendMessage.vue";
+import InterlocutorPanel from "@/components/InterpreterView/InterlocutorPanel.vue";
+import MessageHistory from "@/components/InterpreterView/MessageHistory/MessageHistory.vue";
+import MessageBuilder from "@/components/InterpreterView/MessageBuilder/MessageBuilder.vue";
+import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 </script>
 
 <template>
@@ -16,12 +16,12 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
       </div>
     </div>
     <div id="bottom-panel">
-      <div id="edit-message" tabindex="0" class="tabbable">
+      <div id="message-builder" tabindex="0" class="tabbable">
         <MessageBuilder/>
       </div>
       <div id="separator"/>
-      <div id="send-message" tabindex="0" class="tabbable">
-        <SendMessage/>
+      <div id="message-options" tabindex="0" class="tabbable">
+        <MessageOptions/>
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
 
 #bottom-panel {
   display: flex;
-  width: 100%;
+  width: 100vw;
   height: 55vh;
   max-height: 55vh;
 }
@@ -59,7 +59,6 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   padding: 10px;
   height: 100%;
   width: 50%;
-  //flex-grow: 1;
   max-width: 550px;
 }
 
@@ -69,7 +68,7 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   flex-grow: 1;
 }
 
-#edit-message {
+#message-builder {
   flex-grow: 1;
   background-color: theme.$ossia-light-background-1;
 }
@@ -82,7 +81,7 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
   align-self: center;
 }
 
-#send-message {
+#message-options {
   flex-grow: 1;
   display: flex;
   justify-items: stretch;
@@ -102,8 +101,9 @@ import SendMessage from "@/components/messageBuilder/sendMessage.vue";
     width: 70%;
   }
 
-  #edit-message {
+  #message-builder {
     max-height: 50%;
+    max-width: 100%;
   }
 
   #separator {

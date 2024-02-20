@@ -1,7 +1,7 @@
 <script setup>
-import BuildSentence from "@/components/messageBuilder/editMessage/buildSentence.vue";
 import {ref} from "vue";
-import EditSentence from "@/components/messageBuilder/editMessage/editSentence.vue";
+import BuildSentence from "@/components/InterpreterView/MessageBuilder/tabs/BuildSentence.vue";
+import EditSentence from "@/components/InterpreterView/MessageBuilder/tabs/EditSentence.vue";
 
 const tab = ref('build')
 

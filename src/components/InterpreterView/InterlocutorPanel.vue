@@ -1,6 +1,6 @@
 <script setup>
 
-import MicButton from "@/components/MicButton.vue";
+import MicButton from "@/components/reusable/MicButton.vue";
 </script>
 
 <template>
