@@ -71,6 +71,8 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 #message-builder {
   flex-grow: 1;
   background-color: theme.$ossia-light-background-1;
+  max-height: 100%;
+  max-width: 50%;
 }
 
 #separator {
@@ -86,14 +88,12 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
   display: flex;
   justify-items: stretch;
   background-color: theme.$ossia-light-background-1;
-  height: 100%;
-  min-width: 50%;
 }
 
 @media (max-width: 600px) {
 
   #bottom-panel {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 
   #separator {
@@ -104,10 +104,6 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
   #message-builder {
     max-height: 50%;
     max-width: 100%;
-  }
-
-  #separator {
-    display: none;
   }
 
 }

@@ -2,13 +2,14 @@
 import {ref} from "vue";
 import BuildSentence from "@/components/InterpreterView/MessageBuilder/tabs/BuildSentence.vue";
 import EditSentence from "@/components/InterpreterView/MessageBuilder/tabs/EditSentence.vue";
+import NewSentence from "@/components/InterpreterView/MessageBuilder/tabs/NewSentence.vue";
 
 const tab = ref('build')
 
 </script>
 
 <template>
-  <div id="edit-message-container">
+  <div id="message-builder-container">
     <div id="tab-group">
       <v-tabs id="tabs" v-model="tab">
         <v-tab value="build">
@@ -23,9 +24,9 @@ const tab = ref('build')
       </v-tabs>
     </div>
 
-    <div id="edit-controls">
+    <div id="builder-controls">
       <BuildSentence v-if="tab === 'build'"/>
-      <BuildSentence v-else-if="tab === 'new'"/>
+      <NewSentence v-else-if="tab === 'new'"/>
       <EditSentence v-else-if="tab === 'edit'"/>
     </div>
 
@@ -34,16 +35,17 @@ const tab = ref('build')
 
 <style scoped>
 
-#edit-message-container {
+#message-builder-container {
   display: flex;
   height: 100%;
   flex-direction: column;
-  padding: 5px 0px 1px 0px;
+  padding: 5px 0 1px 0;
   gap: 1px;
 }
 
-#edit-controls {
+#builder-controls {
   display: flex;
+  align-items: center;
   overflow: auto;
   flex-grow: 1;
 }

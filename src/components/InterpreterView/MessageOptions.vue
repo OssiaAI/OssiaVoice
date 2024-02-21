@@ -18,7 +18,8 @@ const sentence_suggestions = ref([
           id="message-input"
       >
         <template v-slot:append-inner>
-          <v-icon id="send-icon" icon="mdi-send"></v-icon>
+          <v-icon id="magic-icon" icon="mdi-auto-fix"/>
+          <v-icon id="send-icon" icon="mdi-send"/>
         </template>
       </v-text-field>
     </div>
@@ -38,6 +39,10 @@ const sentence_suggestions = ref([
   width: 100%;
   align-items: center;
   align-content: center;
+}
+
+#magic-icon {
+  margin-right: 5px
 }
 
 #message-input-wrapper {

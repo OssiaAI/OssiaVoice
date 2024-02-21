@@ -1,10 +1,8 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
 
-const word_suggestions = ref([
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather',
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather',
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather'])
+const word_suggestions = ref(['🍝 Dinner', '🏉 Rugby', '🗳️ Politics', '👨‍👩‍👧 Family', '🏥 Health', '🎭 Art',
+  '🙂 Mood', '🫂 Friends', '🌦️ Weather', '📆 Plans'])
 
 const colours = [
   '#01b476',
@@ -30,13 +28,12 @@ function updateWordSuggestionColors() {
   let i;
   for (i = 0; i < divs.length; i++) {
     let newColor = i % colours.length
+    divs[i].style.backgroundColor = colours[newColor];
     divs[i].style.borderColor = colours[newColor];
   }
 }
 
 function wordClicked(e) {
-  e.target.style.backgroundColor = e.target.style.borderColor
-  e.target.style.color = 'white'
 }
 
 </script>
@@ -44,6 +41,20 @@ function wordClicked(e) {
 <template>
 
   <div class="word-suggestion-container">
+    <div id="extra-words-wrapper">
+      <v-text-field
+          class="extra-words-input"
+          variant="solo"
+          rounded
+          hide-details
+          density="comfortable"
+          placeholder="✍️ New topic"
+      >
+        <template v-slot:append-inner>
+          <v-icon id="sendButton">mdi-send</v-icon>
+        </template>
+      </v-text-field>
+    </div>
     <div
         class="word-suggestion"
         v-for="(word, index) in word_suggestions"
@@ -52,24 +63,6 @@ function wordClicked(e) {
         @click="wordClicked">
       {{ word }}
     </div>
-    <div id="extra-words-wrapper">
-      <v-text-field
-          class="extra-words-input"
-          variant="solo"
-          rounded
-          hide-details
-          density="comfortable"
-          placeholder="add"
-      >
-        <template v-slot:append-inner>
-          <v-icon id="sendButton">mdi-plus</v-icon>
-        </template>
-      </v-text-field>
-    </div>
-    <v-btn id="create" class="edit-btn long-btn">
-      Create sentence
-      <v-icon size="20" color="text-color-primary">mdi-auto-fix</v-icon>
-    </v-btn>
   </div>
 
 </template>
@@ -79,13 +72,13 @@ function wordClicked(e) {
 @use '@/assets/main';
 
 .word-suggestion-container {
-  height: fit-content;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
   padding: 5px 25px;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .word-suggestion {
@@ -93,20 +86,21 @@ function wordClicked(e) {
   width: fit-content;
   padding: 5px 15px;
   border-radius: 1.5em;
+  color: theme.$text-color-primary;
   height: 22px;
   border: 2px solid grey;
   cursor: pointer;
 }
 
 #extra-words-wrapper {
-  width: 100px;
+  width: 150px;
 }
 
 .extra-words-input {
   background-color: theme.$ossia-light-background-1;
 
   &:deep(.v-field) {
-    border: 2px solid #00a6ff;
+    border: 2px solid #ecc502;
     padding-right: 3px;
   }
 

@@ -1,8 +1,28 @@
 @use 'vuetify'; // with ();
 @use "base";
 
-
 #app {
   margin: 0;
   font-weight: normal;
+}
+
+.edit-btn {
+  font-size: 25px;
+  width: 10px;
+
+  &.v-btn--icon.v-btn--density-default {
+    width: 33px;
+    height: 33px;
+  }
+
+  &:deep(*) {
+    text-transform: none;
+  }
+
+}
+
+.long-btn {
+  font-size: 15px;
+  width: fit-content;
+  border-radius: 17px;
 }

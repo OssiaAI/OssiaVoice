@@ -19,6 +19,7 @@ const OssiaLightTheme = {
   dark: false,
   colors: {
     'primary': '#00b600',
+    'text-color-primary': '#ffffff'
   },
   variables: {
   }
