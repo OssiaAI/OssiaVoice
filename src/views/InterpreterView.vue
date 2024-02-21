@@ -33,25 +33,25 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 #interpreter-grid {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
 }
 
 #top-panel {
   display: flex;
   width: 100%;
-  max-height: 45vh;
+  height: 45dvh;
+  flex-grow: 1;
   align-items: stretch;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  //border-color: theme.$ossia-divider-light-2;
 }
 
 #bottom-panel {
+  height: 55dvh;
   display: flex;
   width: 100vw;
-  height: 55vh;
-  max-height: 55vh;
+  z-index: 1;
 }
 
 #interlocutor-panel {
@@ -69,10 +69,10 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 }
 
 #message-builder {
-  flex-grow: 1;
   background-color: theme.$ossia-light-background-1;
-  max-height: 100%;
-  max-width: 50%;
+  height: 100%;
+  width: 50%;
+  overflow: auto;
 }
 
 #separator {
@@ -84,13 +84,22 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 }
 
 #message-options {
-  flex-grow: 1;
+  height: 100%;
+  width: calc(50% - 2px);
   display: flex;
   justify-items: stretch;
   background-color: theme.$ossia-light-background-1;
 }
 
 @media (max-width: 600px) {
+
+  #top-panel {
+    height: 37dvh;
+  }
+
+  #bottom-panel {
+    height: 63dvh;
+  }
 
   #bottom-panel {
     flex-direction: column-reverse;
@@ -101,9 +110,14 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
     width: 70%;
   }
 
+  #message-options {
+    width: 100%;
+    height: calc(50% - 2px);
+  }
+
   #message-builder {
-    max-height: 50%;
-    max-width: 100%;
+    width: 100%;
+    height: 50%;
   }
 
 }

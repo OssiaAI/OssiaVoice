@@ -3,8 +3,7 @@
 </script>
 
 <template>
-  <div class="centred-box"
-       style="flex-wrap: wrap; display: flex; justify-content: center; align-content: center; flex-grow: 1;">
+  <div class="edit-sentence-container">
 
     <div class="edit-chip" style="background-color: #ffdd00">
       <div style="margin: 10px; display:flex; align-items:center">Hint</div>
@@ -16,7 +15,7 @@
                       hide-details bg-color="#ffe970"
                       density="comfortable">
           <template v-slot:append-inner>
-            <v-icon id="sendButton">mdi-send</v-icon>
+            <v-icon id="sendButton">mdi-auto-fix</v-icon>
           </template>
         </v-text-field>
       </div>
@@ -77,6 +76,15 @@
 @use '@/assets/theme';
 @use '@/assets/main';
 
+.edit-sentence-container {
+  display: flex;
+  align-items: center;
+  align-content: safe center;
+  justify-content: safe center;
+  flex-wrap: wrap;
+  padding: 5px 25px;
+}
+
 .emoji {
   background-color: #db74f8;
   &.v-btn.v-btn--density-default {
@@ -100,7 +108,7 @@
   width: fit-content;
   border-radius: 30px;
   padding: 5px;
-  margin: 10px;
+  margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;

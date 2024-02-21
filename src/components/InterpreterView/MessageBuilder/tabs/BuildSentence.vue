@@ -79,19 +79,18 @@ function wordClicked(e) {
 @use '@/assets/main';
 
 .word-suggestion-container {
-  height: fit-content;
   display: flex;
   align-items: center;
-  justify-content: center;
+  align-content: safe center;
+  justify-content: safe center;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 5px 25px;
 }
 
 .word-suggestion {
   box-sizing: content-box;
   width: fit-content;
   padding: 5px 15px;
+  margin: 5px;
   border-radius: 1.5em;
   height: 22px;
   border: 2px solid grey;
@@ -100,6 +99,7 @@ function wordClicked(e) {
 
 #extra-words-wrapper {
   width: 100px;
+  margin: 5px;
 }
 
 .extra-words-input {
@@ -119,6 +119,7 @@ function wordClicked(e) {
 
 #create {
   background-color: theme.$primary;
+  margin: 5px;
 
   &:deep(.v-btn__content) {
     display: flex;

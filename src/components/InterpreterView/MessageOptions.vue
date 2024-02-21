@@ -4,7 +4,10 @@ import {ref} from "vue";
 const sentence_suggestions = ref([
   "Hi, how are you doing? Adding some more content",
   "What's on for your day?",
-  "I'm a little cold"
+  "What's on for your day?",
+  "Hi, how are you doing? Adding some more content",
+  "I'm a little cold",
+  "What's on for your day?"
 ])
 
 </script>
@@ -58,12 +61,13 @@ const sentence_suggestions = ref([
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  align-content: center;
   align-items: center;
-  justify-content: center;
+  align-content: safe center;
+  justify-content: safe center;
   gap: 10px;
   padding: 5px 10px;
   max-height: 100%;
+  overflow: auto;
 }
 
 .message-suggestion {

@@ -15,19 +15,19 @@ const tab = ref('build')
         <v-tab value="build">
           <v-icon size="30" icon="mdi-comment-flash-outline"/>
         </v-tab>
-        <v-tab value="new">
-          <v-icon size="30" icon="mdi-comment-plus-outline"/>
-        </v-tab>
         <v-tab value="edit">
           <v-icon size="30" icon="mdi-comment-edit-outline"/>
+        </v-tab>
+        <v-tab value="new">
+          <v-icon size="30" icon="mdi-comment-plus-outline"/>
         </v-tab>
       </v-tabs>
     </div>
 
     <div id="builder-controls">
       <BuildSentence v-if="tab === 'build'"/>
-      <NewSentence v-else-if="tab === 'new'"/>
       <EditSentence v-else-if="tab === 'edit'"/>
+      <NewSentence v-else-if="tab === 'new'"/>
     </div>
 
   </div>
@@ -37,15 +37,14 @@ const tab = ref('build')
 
 #message-builder-container {
   display: flex;
-  height: 100%;
   flex-direction: column;
-  padding: 5px 0 1px 0;
+  padding-top: 5px;
   gap: 1px;
+  height: 100%;
 }
 
 #builder-controls {
   display: flex;
-  align-items: center;
   overflow: auto;
   flex-grow: 1;
 }

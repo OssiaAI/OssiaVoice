@@ -51,7 +51,7 @@ function wordClicked(e) {
           placeholder="✍️ New topic"
       >
         <template v-slot:append-inner>
-          <v-icon id="sendButton">mdi-send</v-icon>
+          <v-icon id="sendButton">mdi-auto-fix</v-icon>
         </template>
       </v-text-field>
     </div>
@@ -101,7 +101,7 @@ function wordClicked(e) {
 
   &:deep(.v-field) {
     border: 2px solid #ecc502;
-    padding-right: 3px;
+    padding-right: 7px;
   }
 
   &:deep(.v-field__input) {
