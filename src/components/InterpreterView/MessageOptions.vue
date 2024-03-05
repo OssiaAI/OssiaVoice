@@ -1,14 +1,6 @@
 <script setup>
-import {ref} from "vue";
-
-const sentence_suggestions = ref([
-  "Hi, how are you doing? Adding some more content",
-  "What's on for your day?",
-  "What's on for your day?",
-  "Hi, how are you doing? Adding some more content",
-  "I'm a little cold",
-  "What's on for your day?"
-])
+import {useMessageStore} from "@/stores/MessageStore.js";
+const messageStore = useMessageStore()
 
 </script>
 
@@ -27,7 +19,7 @@ const sentence_suggestions = ref([
       </v-text-field>
     </div>
     <div class="message-suggestion-container">
-      <div class="message-suggestion" v-for="(sentence, index) in sentence_suggestions" :key="index" tabindex="0">
+      <div class="message-suggestion" v-for="(sentence, index) in messageStore.sentenceSuggestions" :key="index" tabindex="0">
         {{ sentence }}
       </div>
     </div>

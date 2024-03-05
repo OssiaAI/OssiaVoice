@@ -33,7 +33,7 @@
       <v-btn class="edit-btn" icon="" style="background-color: #5b91ff; color: white">
         <v-icon color="white" size="25">mdi-minus</v-icon>
       </v-btn>
-      <div style="margin: 10px; color: white">Formality</div>
+      <div style="margin: 10px; color: white">Politeness</div>
       <v-btn class="edit-btn" icon="" style="background-color: #5b91ff; color: white">
         <v-icon color="white" size="25">mdi-plus</v-icon>
       </v-btn>

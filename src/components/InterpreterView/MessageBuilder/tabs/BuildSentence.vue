@@ -1,10 +1,7 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
-
-const word_suggestions = ref([
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather',
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather',
-  'hi', 'name', 'James', 'how', 'today', 'friends', 'drink', 'Tim', 'weather'])
+import {useMessageStore} from "@/stores/MessageStore.js";
+const messageStore = useMessageStore()
 
 const colours = [
   '#01b476',
@@ -18,7 +15,7 @@ const colours = [
   '#e7177e',
 ];
 
-watch(() => word_suggestions, () => {
+watch(() => messageStore.wordSuggestions, () => {
   updateWordSuggestionColors();
 })
 onMounted(() => {
@@ -46,7 +43,7 @@ function wordClicked(e) {
   <div class="word-suggestion-container">
     <div
         class="word-suggestion"
-        v-for="(word, index) in word_suggestions"
+        v-for="(word, index) in messageStore.wordSuggestions"
         :key="index"
         tabindex="0"
         @click="wordClicked">
