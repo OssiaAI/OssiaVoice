@@ -46,6 +46,7 @@ const tab = ref('build')
 #builder-controls {
   display: flex;
   overflow: auto;
+  justify-content: center;
   flex-grow: 1;
 }
 

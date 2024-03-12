@@ -33,9 +33,6 @@ function updateWordSuggestionColors() {
   }
 }
 
-function wordClicked(e) {
-}
-
 </script>
 
 <template>
@@ -86,7 +83,7 @@ function wordClicked(e) {
   width: fit-content;
   padding: 5px 15px;
   border-radius: 1.5em;
-  color: theme.$text-color-primary;
+  color: theme.$text-color;
   height: 22px;
   border: 2px solid grey;
   cursor: pointer;
@@ -116,7 +113,7 @@ function wordClicked(e) {
 
   &:deep(.v-btn__content) {
     display: flex;
-    color: theme.$text-color-primary;
+    color: theme.$text-color;
     gap: 5px;
   }
 }

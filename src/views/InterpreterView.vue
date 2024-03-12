@@ -3,6 +3,8 @@ import InterlocutorPanel from "@/components/InterpreterView/InterlocutorPanel.vu
 import MessageHistory from "@/components/InterpreterView/MessageHistory/MessageHistory.vue";
 import MessageBuilder from "@/components/InterpreterView/MessageBuilder/MessageBuilder.vue";
 import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
+import {useLoadingStore} from "@/stores/LoadingStore.js";
+const loadingStore = useLoadingStore()
 </script>
 
 <template>
@@ -15,6 +17,9 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
         <MessageHistory/>
       </div>
     </div>
+    <v-progress-linear
+        v-if="loadingStore.newSentenceLoading || loadingStore.newWordsLoading"
+        indeterminate rounded color="primary"/>
     <div id="bottom-panel">
       <div id="message-builder" tabindex="0" class="tabbable">
         <MessageBuilder/>

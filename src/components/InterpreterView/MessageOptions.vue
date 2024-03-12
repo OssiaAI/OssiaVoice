@@ -2,6 +2,10 @@
 import {useMessageStore} from "@/stores/MessageStore.js";
 const messageStore = useMessageStore()
 
+function submitMessage (sentence) {
+  messageStore.messageHistory.push({ role: "assistant", content: sentence})
+}
+
 </script>
 
 <template>
@@ -11,6 +15,7 @@ const messageStore = useMessageStore()
           label="Message"
           hide-details
           id="message-input"
+          density="comfortable"
       >
         <template v-slot:append-inner>
           <v-icon id="magic-icon" icon="mdi-auto-fix"/>
@@ -19,14 +24,18 @@ const messageStore = useMessageStore()
       </v-text-field>
     </div>
     <div class="message-suggestion-container">
-      <div class="message-suggestion" v-for="(sentence, index) in messageStore.sentenceSuggestions" :key="index" tabindex="0">
+      <div @click="submitMessage(sentence)"
+           v-for="(sentence, index) in messageStore.sentenceSuggestions" :key="index"
+           class="message-suggestion"
+           tabindex="0">
         {{ sentence }}
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use '@/assets/theme';
 
 #send-message-wrapper {
   display: flex;
@@ -63,13 +72,21 @@ const messageStore = useMessageStore()
 }
 
 .message-suggestion {
-  background-color: #00b600;
+  background-color: theme.$primary;
   box-sizing: content-box;
   color: white;
   height: fit-content(20%);
   max-width: 33%;
   padding: 5px 15px;
   border-radius: 1.5em;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken(theme.$primary, 5%);
+  }
+  &:active {
+    background-color: darken(theme.$primary, 10%);
+  }
 }
 
 </style>

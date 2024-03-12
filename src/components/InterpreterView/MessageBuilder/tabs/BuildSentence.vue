@@ -1,7 +1,13 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {useMessageStore} from "@/stores/MessageStore.js";
+import WordChip from "@/components/reusable/WordChip.vue";
+
 const messageStore = useMessageStore()
+const wordObjects = reactive({"words": new Set([])})
+const previousWordObjects = reactive({"words": new Set([])})
+const newWord = ref('')
+let temp
 
 const colours = [
   '#01b476',
@@ -16,24 +22,44 @@ const colours = [
 ];
 
 watch(() => messageStore.wordSuggestions, () => {
-  updateWordSuggestionColors();
+  updateWordSuggestions()
 })
 onMounted(() => {
-  updateWordSuggestionColors();
+  updateWordSuggestions()
 })
 
-function updateWordSuggestionColors() {
-  const divs = document.getElementsByClassName("word-suggestion");
-  let i;
-  for (i = 0; i < divs.length; i++) {
-    let newColor = i % colours.length
-    divs[i].style.borderColor = colours[newColor];
+function updateWordSuggestions() {
+  temp = new Set(messageStore.wordSuggestions.map((word, index) => {
+    return {'word': word, 'active': false, 'color': colours[index % colours.length]}
+  }))
+  wordObjects.words = new Set([...temp, ...previousWordObjects.words])
+}
+
+function toggleActive(event, item) {
+  item.active = !item.active
+}
+
+function submitGenerateSentence() {
+  let selectedWordObjects = [...wordObjects.words].filter((messageObject) => {
+    if (messageObject.active) {
+      return messageObject
+    }
+  })
+  let wordList = Object.values(selectedWordObjects).map((wordObject) => {
+    return wordObject.word
+  })
+  if (wordList.length > 0) {
+    previousWordObjects.words = selectedWordObjects
+    messageStore.generateSentencesFromWords(wordList)
+    messageStore.generateMoreWordsFromWords(wordList)
   }
 }
 
-function wordClicked(e) {
-  e.target.style.backgroundColor = e.target.style.borderColor
-  e.target.style.color = 'white'
+function addWord(){
+  let index = wordObjects.words.size
+  wordObjects.words = new Set([...wordObjects.words,
+    {'word': newWord.value, 'active': true, 'color': colours[(index) % colours.length]}])
+  newWord.value = ''
 }
 
 </script>
@@ -41,14 +67,16 @@ function wordClicked(e) {
 <template>
 
   <div class="word-suggestion-container">
-    <div
+    <WordChip
         class="word-suggestion"
-        v-for="(word, index) in messageStore.wordSuggestions"
+        v-for="(item, index) in wordObjects.words"
+        :index="index"
+        :color="colours[index % colours.length]"
+        :active="item.active"
         :key="index"
-        tabindex="0"
-        @click="wordClicked">
-      {{ word }}
-    </div>
+        @click="toggleActive($event, item)">
+      {{ item.word }}
+    </WordChip>
     <div id="extra-words-wrapper">
       <v-text-field
           class="extra-words-input"
@@ -57,13 +85,20 @@ function wordClicked(e) {
           hide-details
           density="comfortable"
           placeholder="add"
+          v-model="newWord"
+          @keydown.enter="addWord"
       >
         <template v-slot:append-inner>
-          <v-icon id="sendButton">mdi-plus</v-icon>
+          <v-icon
+              id="addButton"
+              @click="addWord"
+          >
+            mdi-plus
+          </v-icon>
         </template>
       </v-text-field>
     </div>
-    <v-btn id="create" class="edit-btn long-btn">
+    <v-btn id="create" class="edit-btn long-btn" @click="submitGenerateSentence">
       Create sentence
       <v-icon size="20" color="text-color-primary">mdi-auto-fix</v-icon>
     </v-btn>
@@ -81,17 +116,6 @@ function wordClicked(e) {
   align-content: safe center;
   justify-content: safe center;
   flex-wrap: wrap;
-}
-
-.word-suggestion {
-  box-sizing: content-box;
-  width: fit-content;
-  padding: 5px 15px;
-  margin: 5px;
-  border-radius: 1.5em;
-  height: 22px;
-  border: 2px solid grey;
-  cursor: pointer;
 }
 
 #extra-words-wrapper {
@@ -114,13 +138,25 @@ function wordClicked(e) {
   }
 }
 
+#addButton {
+  cursor: pointer;
+
+  &:hover {
+    color: #00a6ff;
+  }
+
+  &:active {
+    color: darken(#00a6ff, 10%);
+  }
+}
+
 #create {
   background-color: theme.$primary;
   margin: 5px;
 
   &:deep(.v-btn__content) {
     display: flex;
-    color: theme.$text-color-primary;
+    color: theme.$text-color;
     gap: 5px;
   }
 }

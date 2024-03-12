@@ -38,8 +38,40 @@ The format of the conversation will be a list of previous messages, followed by 
 generate new sentences / word lists, or to modify previous suggestions.
 
 All your generated suggestions MUST be a valid JSON list.
-Below is an example of an input and your expected suggestion format. You will be playing the role of the assistant:
+Below are some examples of inputs and outputs in the correct format. You will be playing the role of the assistant:
+user:
+just going to the bar, want anything?
 
+system:
+Given the conversation history, generate a list of 3 to 5 short generic sentences the user may want to say
+
+assistant:
+{
+  "suggestions": [
+    "No I really am okay thanks",
+    "Oh go on then, a beer would be great thanks",
+    "Well, maybe a glass of water?"
+  ]
+}
+-----
+user:
+have you seen Dune yet?
+
+system:
+Given the following list of words, generate between 3-5 sentences that the user might be trying to say. 
+Keep them generic:
+['recommend', 'watching']
+
+assistant:
+{
+  "suggestions": [
+    "No not yet, would you recommend watching it?",
+    "Yes it was great, I'd really recommend watching it!",
+    "Yes it wasn't that good, wouldn't really recommend watching it",
+  ]
+}
+
+-----
 user:
 just going to the bar, want anything?
 
@@ -54,8 +86,7 @@ assistant:
     "Well, maybe a glass of water?"
   ]
 }
-
-The below is a similar response to the above for a list of words:
+-----
 user:
 just going to the bar, want anything?
 
@@ -83,5 +114,4 @@ assistant:
     "please",
   ]
 }
-
 `;

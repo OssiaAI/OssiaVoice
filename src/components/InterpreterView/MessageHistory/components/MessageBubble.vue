@@ -1,20 +1,6 @@
-<script setup lang="ts">
+<script setup>
 
-const props = defineProps({
-  message: Object<{ role: string, content: string }>
-})
-
-function getMessageContent(message) {
-  try {
-    const body = JSON.parse(message)
-    if (body.text === undefined) {
-      throw new Error();
-    }
-    return body.text
-  } catch (error) {
-    return message
-  }
-}
+const props = defineProps(['message'])
 
 </script>
 
@@ -24,7 +10,7 @@ function getMessageContent(message) {
                   messageSystem: props.message.role === 'system',
                   messageSelf: props.message.role === 'assistant'
                 }">
-    {{ getMessageContent(props.message.content) }}
+    {{ props.message.content }}
   </div>
 
 </template>

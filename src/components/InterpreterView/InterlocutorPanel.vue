@@ -6,8 +6,8 @@ const messageStore = useMessageStore()
 function submitInterlocutorMessage() {
   if (messageStore.interlocutorPhrase !== '') {
     messageStore.messageHistory.push({ role: "user", content: messageStore.interlocutorPhrase})
-    messageStore.generateWords(messageStore.interlocutorPhrase)
-    messageStore.generateSentences(messageStore.interlocutorPhrase)
+    messageStore.generateWords()
+    messageStore.generateSentences()
   }
 }
 
@@ -24,6 +24,7 @@ function submitInterlocutorMessage() {
             id="message-input"
             v-model="messageStore.interlocutorPhrase"
             @keydown.enter="submitInterlocutorMessage"
+            density="comfortable"
         >
         </v-text-field>
         <div id="send-icon-wrapper">
@@ -91,10 +92,16 @@ function submitInterlocutorMessage() {
 }
 
 #context-input {
-  border-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   padding: 16px;
   min-height: 10vh;
   background-color: rgb(234, 231, 235);
+  border-bottom: 1px solid rgb(152, 153, 159);
+  &:active {
+    border: none;
+    border-bottom: 1px solid rgb(82, 83, 86);
+  }
 }
 
 #context-input::placeholder {

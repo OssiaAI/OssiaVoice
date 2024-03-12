@@ -26,7 +26,10 @@ $ossia-text-dark-2: rgba(235, 235, 235, 0.64);
 
 ////// To share with vuetify components
 $primary: #00b600;
-$text-color-primary: #ffffff;
+$text-color: #ffffff;
+$text-color-inverted: #181818;
+$text-color-muted: #d9d9d9;
+$text-color-inverted-faded: #ababab;
 
 //*:focus {
 //  border: 5px solid red !important;
