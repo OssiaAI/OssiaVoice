@@ -17,27 +17,29 @@ export const useMessageStore = defineStore('messages', () => {
   const sentenceSuggestions = ref([
     "Hi, how are you doing?", "What's on for your day?",
     "I'm a little cold", "Get up to anything interesting today?"])
+  const editInstruction = ref(null)
+  const messageTab = ref('build')
 
   const client = new ChatOpenAI(userBackstory.value)
 
   // Respond
   async function generateSentences() {
     const command = `Given the conversation history, generate a list of 3 to 5 short generic sentences the 
-      user may want to say`
+      assistant may want to say`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       previousSuggestions, false, true)
   }
 
   async function generateWords() {
     const command = `Given the conversation history, generate a short list of key words and connector words or 
-    very short phrases the user can select from to build a new sentence`
+    very short phrases the assistant can select from to build a new sentence`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       previousSuggestions, true, false)
   }
 
   // Build Sentences
   async function generateSentencesFromWords(words) {
-    const command = `Given the following list of words, generate between 3-5 sentences that the user 
+    const command = `Given the following list of words, generate between 3-5 sentences that the assistant 
     might be trying to say. Keep them generic:\n${words}`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       previousSuggestions, false, true)
@@ -45,7 +47,7 @@ export const useMessageStore = defineStore('messages', () => {
 
   async function generateMoreWordsFromWords(words) {
     const command = `Given the following list of words, generate another list of related words that the 
-    user could select from to build a sentence:\n${words}`
+    assistant could select from to build a sentence:\n${words}`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       previousSuggestions, true, false)
   }
@@ -53,14 +55,14 @@ export const useMessageStore = defineStore('messages', () => {
   // New Sentence
   async function generateWordSuggestionsFromNewTopic(topic) {
     const command = `Generate a short list of key words and connector words the 
-      user can select from to build a new sentence, based around a new topic: '${topic}'`
+      assistant can select from to build a new sentence, based around a new topic: '${topic}'`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       previousSuggestions, true, false)
   }
 
   async function generateSentenceSuggestionsFromNewTopic(topic) {
     const command = `Generate a list of 3 to 5 short generic sentences the 
-      user may want to say, based around a new topic: '${topic}'`
+      assistant may want to say, based around a new topic: '${topic}'`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       previousSuggestions, false, true)
   }
@@ -89,7 +91,22 @@ export const useMessageStore = defineStore('messages', () => {
       previousSuggestions, false, true)
   }
 
+  async function generateWordSuggestionsFromHint(hint) {
+    const command = `Given the conversation history, generate a short list of key words and connector words or 
+    very short phrases the assistant can select from to build a new sentence, based on the hint: '${hint}'`
+    wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
+      previousSuggestions, true, false)
+  }
+
+  async function generateSentenceSuggestionsFromHint(hint) {
+    const command = `Given the conversation history, generate a list of 3 to 5 short generic sentences the 
+      assistant may want to say, based on the hint: '${hint}'`
+    sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
+      previousSuggestions, false, true)
+  }
+
   return {
+    messageTab,
     userBackstory,
     currentContext,
     interlocutorPhrase,
@@ -98,6 +115,7 @@ export const useMessageStore = defineStore('messages', () => {
     previousSuggestions,
     wordSuggestions,
     sentenceSuggestions,
+    editInstruction,
     generateSentences,
     generateWords,
     generateSentencesFromWords,
@@ -107,5 +125,7 @@ export const useMessageStore = defineStore('messages', () => {
     editSingleResponseWithHint,
     editAllResponsesWithHint,
     generateNewResponses,
+    generateWordSuggestionsFromHint,
+    generateSentenceSuggestionsFromHint,
   }
 })

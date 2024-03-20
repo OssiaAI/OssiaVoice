@@ -22,9 +22,10 @@ const messageStore = useMessageStore()
 
 #placeholder {
   font-style: italic;
-  color: theme.$text-color-inverted-faded;
+  color: theme.$text-color-inverted-muted;
   width: fit-content;
   margin: 20px auto;
+  text-align: center;
 }
 
 #messageWindow {

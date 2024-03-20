@@ -4,6 +4,7 @@ import MessageHistory from "@/components/InterpreterView/MessageHistory/MessageH
 import MessageBuilder from "@/components/InterpreterView/MessageBuilder/MessageBuilder.vue";
 import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 import {useLoadingStore} from "@/stores/LoadingStore.js";
+
 const loadingStore = useLoadingStore()
 </script>
 
@@ -17,16 +18,18 @@ const loadingStore = useLoadingStore()
         <MessageHistory/>
       </div>
     </div>
-    <v-progress-linear
-        v-if="loadingStore.newSentenceLoading || loadingStore.newWordsLoading"
-        indeterminate rounded color="primary"/>
     <div id="bottom-panel">
-      <div id="message-builder" tabindex="0" class="tabbable">
-        <MessageBuilder/>
-      </div>
-      <div id="separator"/>
-      <div id="message-options" tabindex="0" class="tabbable">
-        <MessageOptions/>
+      <v-progress-linear
+          v-if="loadingStore.newSentenceLoading || loadingStore.newWordsLoading"
+          indeterminate rounded color="primary"/>
+      <div id="message-panels">
+        <div id="message-builder" tabindex="0" class="tabbable">
+          <MessageBuilder/>
+        </div>
+        <div id="separator"/>
+        <div id="message-options" tabindex="0" class="tabbable">
+          <MessageOptions/>
+        </div>
       </div>
     </div>
   </div>
@@ -55,26 +58,33 @@ const loadingStore = useLoadingStore()
 #bottom-panel {
   height: 55dvh;
   display: flex;
+  flex-direction: column;
   width: 100vw;
   z-index: 1;
 }
 
+#message-panels {
+  display: flex;
+  height: 100%;
+}
+
 #interlocutor-panel {
-  background: theme.$ossia-light-background-2;
+  background: theme.$occam-light-background-2;
   padding: 10px;
   height: 100%;
   width: 50%;
   max-width: 550px;
+  overflow: auto;
 }
 
 #message-history {
-  background: theme.$ossia-light-background-1;;
+  background: theme.$occam-light-background-1;;
   height: 100%;
   flex-grow: 1;
 }
 
 #message-builder {
-  background-color: theme.$ossia-light-background-1;
+  background-color: theme.$occam-light-background-1;
   height: 100%;
   width: 50%;
   overflow: auto;
@@ -83,7 +93,7 @@ const loadingStore = useLoadingStore()
 #separator {
   flex-grow: 0;
   width: 2px;
-  background-color: theme.$ossia-divider-light-1;
+  background-color: theme.$occam-divider-light-1;
   height: 70%;
   align-self: center;
 }
@@ -93,7 +103,7 @@ const loadingStore = useLoadingStore()
   width: calc(50% - 2px);
   display: flex;
   justify-items: stretch;
-  background-color: theme.$ossia-light-background-1;
+  background-color: theme.$occam-light-background-1;
 }
 
 @media (max-width: 600px) {
@@ -106,7 +116,7 @@ const loadingStore = useLoadingStore()
     height: 63dvh;
   }
 
-  #bottom-panel {
+  #message-panels {
     flex-direction: column-reverse;
   }
 

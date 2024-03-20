@@ -1,4 +1,4 @@
-# OssiaVoice
+# OccamVoice
 Description incoming
 
 ## Licence: 
@@ -6,5 +6,5 @@ Description incoming
   In addition, the contributor agreement below applies
 
 ## Contributor Agreement
-  Any contributor, by adding to or adapting the contents of this repository, accepts that Ossia retains full copyright over it's contents.
+  Any contributor, by adding to or adapting the contents of this repository, accepts that Occam retains full copyright over it's contents.
 

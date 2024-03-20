@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import {useLoadingStore} from "@/stores/LoadingStore.js";
 
-const model = "gpt-3.5-turbo-0125" // "gpt-4-turbo-preview" // "gpt-3.5-turbo-0125" //
+const model = "gpt-4-turbo-preview" // "gpt-4-turbo-preview" // "gpt-3.5-turbo-0125" //
 
 export class ChatOpenAI {
   constructor(systemMessage) {

@@ -7,6 +7,17 @@ import micActiveImg from '@/assets/mic-button/mic-active.svg'
 const micActive = ref(false)
 const micBtnImage = ref(micImg)
 
+const model = defineModel()
+const emit = defineEmits(['textAvailable'])
+const continuous = false
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+const recognition = new SpeechRecognition()
+
+recognition.continous = false
+recognition.interimResults = true
+recognition.lang = 'en-US'
+
 function micHover() {
   if (micActive.value) return
   micBtnImage.value = micHoverImg
@@ -21,10 +32,48 @@ function micClick() {
   micActive.value = !micActive.value
   if (micActive.value) {
     micBtnImage.value = micActiveImg
+    startRecognition()
   } else {
     micBtnImage.value = micImg
+    recognition.stop()
   }
+}
 
+function startRecognition() {
+    recognition.onstart = () => {
+      console.log("Listening!")
+    }
+    recognition.start()
+    recognition.onend = () => {
+        emit('textAvailable')
+        if (continuous && micActive.value) {
+          console.log("...continue listening...")
+          recognition.start()
+        } else if (micActive.value) {
+          micClick()
+        }
+      }
+
+    recognition.onresult = event => {
+      let interimTranscript = ''
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          model.value = transcript
+          console.log(`Final recognition: ${transcript}`)
+        }
+        else {
+          console.log(`interim recognition: ${transcript}`)
+          interimTranscript += transcript
+          model.value = interimTranscript
+        }
+      }
+    }
+
+    recognition.onerror = event => {
+      console.log("Error occurred in recognition: " + event.error)
+    }
 }
 
 
@@ -32,7 +81,6 @@ function micClick() {
 
 <template>
   <div id="mic-btn-container">
-    <!--    <div id="mic-halo" :class="{ haloGrow: micActive }"/>-->
     <img id="mic-btn" :class="{ haloGrow: micActive }" alt="mic-icon" :src="micBtnImage" @mouseenter="micHover" @mouseleave="micUnhover"
          @click="micClick"/>
   </div>
@@ -54,8 +102,7 @@ function micClick() {
   position: relative;
   align-self: center;
   justify-self: center;
-  //border: 20px solid green;
-  //border-radius: 75%;
+  justify-content: center;
 }
 
 

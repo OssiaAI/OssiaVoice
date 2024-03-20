@@ -66,14 +66,14 @@ function addWord(){
 
 <template>
 
-  <div class="word-suggestion-container">
+  <div class="word-chip-container">
     <WordChip
-        class="word-suggestion"
         v-for="(item, index) in wordObjects.words"
         :index="index"
         :color="colours[index % colours.length]"
         :active="item.active"
         :key="index"
+        class="raised"
         @click="toggleActive($event, item)">
       {{ item.word }}
     </WordChip>
@@ -110,7 +110,7 @@ function addWord(){
 @use '@/assets/theme';
 @use '@/assets/main';
 
-.word-suggestion-container {
+.word-chip-container {
   display: flex;
   align-items: center;
   align-content: safe center;
@@ -124,7 +124,7 @@ function addWord(){
 }
 
 .extra-words-input {
-  background-color: theme.$ossia-light-background-1;
+  background-color: theme.$occam-light-background-1;
 
   &:deep(.v-field) {
     border: 2px solid #00a6ff;

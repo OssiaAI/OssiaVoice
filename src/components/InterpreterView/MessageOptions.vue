@@ -1,9 +1,28 @@
 <script setup>
 import {useMessageStore} from "@/stores/MessageStore.js";
+import speak from "@/repositories/TextToSpeechRepository.js";
+
 const messageStore = useMessageStore()
 
-function submitMessage (sentence) {
-  messageStore.messageHistory.push({ role: "assistant", content: sentence})
+function submitMessage(sentence, hint) {
+  if (sentence && hint) {
+    messageStore.editSingleResponseWithHint(sentence, hint)
+    messageStore.editInstruction = null
+  }
+  else if (sentence) {
+    messageStore.messageHistory.push({role: "assistant", content: sentence})
+    speak(sentence)
+  }
+  else if (hint) {
+    messageStore.generateWordSuggestionsFromHint(hint)
+    messageStore.generateSentenceSuggestionsFromHint(hint)
+  }
+}
+
+function editAllMessages() {
+  let hint = messageStore.editInstruction
+  messageStore.editAllResponsesWithHint(hint)
+  messageStore.editInstruction = null
 }
 
 </script>
@@ -15,21 +34,46 @@ function submitMessage (sentence) {
           label="Message"
           hide-details
           id="message-input"
+          v-model="messageStore.scriberPhrase"
+          @keydown.enter="submitMessage(messageStore.scriberPhrase)"
           density="comfortable"
+          style="max-width: 100%"
       >
-        <template v-slot:append-inner>
-          <v-icon id="magic-icon" icon="mdi-auto-fix"/>
-          <v-icon id="send-icon" icon="mdi-send"/>
-        </template>
       </v-text-field>
+      <div id="icons-wrapper">
+        <v-icon
+            class="message-icon"
+            id="magic-icon"
+            icon="mdi-auto-fix"
+            @click.stop="submitMessage(null, messageStore.scriberPhrase); messageStore.scriberPhrase = ''"/>
+        <v-icon
+            class="message-icon"
+            id="send-icon"
+            icon="mdi-send"
+            @click.stop="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''"/>
+      </div>
     </div>
+    <em id="editInstruction" v-if="messageStore.editInstruction" >
+      {{ messageStore.editInstruction }}
+      <br/>
+      Select one or 'edit all' to apply</em>
     <div class="message-suggestion-container">
       <div @click="submitMessage(sentence)"
            v-for="(sentence, index) in messageStore.sentenceSuggestions" :key="index"
-           class="message-suggestion"
+           class="message-suggestion raised"
            tabindex="0">
         {{ sentence }}
       </div>
+        <span v-if="messageStore.editInstruction"
+              class="message-suggestion message-action-btn raised"
+              @click.stop="editAllMessages">
+          Edit all
+        </span>
+        <span v-if="messageStore.editInstruction"
+              class="message-suggestion message-action-btn raised"
+              @click.stop="messageStore.editInstruction = null">
+          <v-icon icon="mdi-close"/>
+        </span>
     </div>
   </div>
 </template>
@@ -43,19 +87,55 @@ function submitMessage (sentence) {
   width: 100%;
   align-items: center;
   align-content: center;
+  padding: 0 5px;
 }
 
-#magic-icon {
-  margin-right: 5px
+
+#icons-wrapper {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  margin-left: -80px;
+}
+
+#magic-icon{
+  color: black;
+  padding: 18px;
+
+  &:hover {
+    color: darken(theme.$primary, 5%);
+  }
+  &:active {
+    color: darken(theme.$primary, 10%);
+  }
+}
+
+#send-icon{
+  color: theme.$primary;
+  padding: 18px;
+
+  &:hover {
+    color: darken(theme.$primary, 5%);
+  }
+  &:active {
+    color: darken(theme.$primary, 10%);
+  }
 }
 
 #message-input-wrapper {
   margin: 5px auto;
-  width: 95%;
+  width: 100%;
+  display: flex;
+  justify-items: stretch;
+  &:deep(input) {
+    padding-right: 85px;
+  }
 }
 
-#message-input {
-  width: 100%;
+#editInstruction {
+  color: theme.$text-color-inverted-muted;
+  text-align: center;
 }
 
 .message-suggestion-container {
@@ -74,7 +154,7 @@ function submitMessage (sentence) {
 .message-suggestion {
   background-color: theme.$primary;
   box-sizing: content-box;
-  color: white;
+  color: theme.$text-color;
   height: fit-content(20%);
   max-width: 33%;
   padding: 5px 15px;
@@ -84,8 +164,27 @@ function submitMessage (sentence) {
   &:hover {
     background-color: darken(theme.$primary, 5%);
   }
+
   &:active {
     background-color: darken(theme.$primary, 10%);
+  }
+}
+
+.message-action-btn {
+  border: 2px solid theme.$primary;
+  background-color: transparent;
+  color: theme.$text-color-inverted;
+
+  & > i {
+    color: theme.$text-color-inverted;
+  }
+
+  &:hover {
+    background-color: darken(theme.$background, 5%);
+  }
+
+  &:active {
+    background-color: darken(theme.$background, 10%);
   }
 }
 

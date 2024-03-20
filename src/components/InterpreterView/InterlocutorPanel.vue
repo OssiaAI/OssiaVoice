@@ -8,6 +8,7 @@ function submitInterlocutorMessage() {
     messageStore.messageHistory.push({ role: "user", content: messageStore.interlocutorPhrase})
     messageStore.generateWords()
     messageStore.generateSentences()
+    messageStore.interlocutorPhrase = ''
   }
 }
 
@@ -15,7 +16,7 @@ function submitInterlocutorMessage() {
 
 <template>
   <div id="interlocutor-container">
-    <micButton id="mic-btn"/>
+    <micButton id="mic-btn" v-model="messageStore.interlocutorPhrase" @textAvailable="submitInterlocutorMessage"/>
     <div id="input-wrapper">
       <div id="message-input-wrapper">
         <v-text-field
@@ -28,11 +29,12 @@ function submitInterlocutorMessage() {
         >
         </v-text-field>
         <div id="send-icon-wrapper">
-          <v-icon id="send-icon" icon="mdi-send" @click.stop="submitInterlocutorMessage"></v-icon>
+          <v-icon id="send-icon" icon="mdi-send" @click.stop="submitInterlocutorMessage"/>
         </div>
       </div>
       <textarea
           id="context-input"
+          v-model="messageStore.currentContext"
           placeholder="Context"
       />
     </div>
@@ -47,6 +49,7 @@ function submitInterlocutorMessage() {
   flex-direction: column;
   gap: 5px;
   width: 100%;
+  height: 100%;
   align-items: center;
   align-content: center;
 }
@@ -78,6 +81,7 @@ function submitInterlocutorMessage() {
 }
 
 #input-wrapper {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -89,13 +93,17 @@ function submitInterlocutorMessage() {
   width: 100%;
   display: flex;
   justify-items: stretch;
+  &:deep(input) {
+    padding-right: 40px;
+  }
 }
 
 #context-input {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   padding: 16px;
-  min-height: 10vh;
+  min-height: 48px;
+  flex-grow: 1;
   background-color: rgb(234, 231, 235);
   border-bottom: 1px solid rgb(152, 153, 159);
   &:active {
@@ -108,14 +116,13 @@ function submitInterlocutorMessage() {
   color: rgb(100, 105, 114);
 }
 
-@media screen and (max-height: 815px) {
+@media screen and (max-width: 600px), (max-height: 770px) {
 
   #mic-btn {
     height: 140px;
   }
 
   #context-input {
-    min-height: unset;
     height: 56px;
   }
 }
