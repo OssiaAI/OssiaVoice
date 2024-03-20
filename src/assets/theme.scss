@@ -1,49 +1,59 @@
-$ossia-white: #ffffff;
-$ossia-white-soft: #f8f8f8;
-$ossia-white-mute: #f2f2f2;
+$occam-white: #ffffff;
+$occam-white-soft: #f8f8f8;
+$occam-white-mute: #f2f2f2;
 
-$ossia-light-background-1: #ffffff;
-$ossia-light-background-2: rgb(243, 239, 243);
+$occam-light-background-1: #ffffff;
+$occam-light-background-2: rgb(243, 239, 243);
 
-$ossia-black: #181818;
-$ossia-black-soft: #222222;
-$ossia-black-mute: #282828;
+$occam-black: #181818;
+$occam-black-soft: #222222;
+$occam-black-mute: #282828;
 
-$ossia-dark-background-1: rgba(12, 12, 12, 0.29);
-$ossia-dark-background-2: rgba(21, 21, 21, 0.29);
+$occam-dark-background-1: rgba(12, 12, 12, 0.29);
+$occam-dark-background-2: rgba(21, 21, 21, 0.29);
 
-$ossia-indigo: #111b26;
+$occam-indigo: #111b26;
 
-$ossia-divider-light-1: #c5c5c5;
-$ossia-divider-light-2: #a6a6a6;
-$ossia-divider-dark-1: rgba(84, 84, 84, 0.65);
-$ossia-divider-dark-2: rgba(84, 84, 84, 0.48);
+$occam-divider-light-1: #c5c5c5;
+$occam-divider-light-2: #a6a6a6;
+$occam-divider-dark-1: rgba(84, 84, 84, 0.65);
+$occam-divider-dark-2: rgba(84, 84, 84, 0.48);
 
-$ossia-text-light-1: $ossia-indigo;
-$ossia-text-light-2: rgba(60, 60, 60, 0.66);
-$ossia-text-dark-1: $ossia-white;
-$ossia-text-dark-2: rgba(235, 235, 235, 0.64);
+$occam-text-light-1: $occam-indigo;
+$occam-text-light-2: rgba(60, 60, 60, 0.66);
+$occam-text-dark-1: $occam-white;
+$occam-text-dark-2: rgba(235, 235, 235, 0.64);
 
 ////// To share with vuetify components
 $primary: #00b600;
-$text-color-primary: #ffffff;
+$secondary: #00a6ff;
+
+$background: #ffffff;
+$background-muted: #f2f2f2;
+$background-inverted: #181818;
+$background-inverted-muted: #1a1a1a;
+
+$text-color: #ffffff;
+$text-color-muted: #d9d9d9;
+$text-color-inverted: #181818;
+$text-color-inverted-muted: #464646;
 
 //*:focus {
 //  border: 5px solid red !important;
 //}
 
 @mixin light-mode {
-  background-color: $ossia-white;
+  background-color: $occam-white;
   * {
-    color: $ossia-text-light-1;
-    border-color: $ossia-divider-light-1;
+    color: $occam-text-light-1;
+    border-color: $occam-divider-light-1;
   }
 }
 
 @mixin dark-mode {
-  background-color: $ossia-black;
+  background-color: $occam-black;
   * {
-    color: $ossia-text-dark-1;
-    border-color: $ossia-divider-dark-2;
+    color: $occam-text-dark-1;
+    border-color: $occam-divider-dark-2;
   }
 }

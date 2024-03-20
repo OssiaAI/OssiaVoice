@@ -1,8 +1,12 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
+import {useMessageStore} from "@/stores/MessageStore.js";
 
-const word_suggestions = ref(['🍝 Dinner', '🏉 Rugby', '🗳️ Politics', '👨‍👩‍👧 Family', '🏥 Health', '🎭 Art',
+const messageStore = useMessageStore()
+
+const wordSuggestions = ref(['🍝 Dinner', '🏉 Rugby', '🗳️ Politics', '👨‍👩‍👧 Family', '🏥 Health', '🎭 Art',
   '🙂 Mood', '🫂 Friends', '🌦️ Weather', '📆 Plans'])
+const newSuggestion = ref('')
 
 const colours = [
   '#01b476',
@@ -16,9 +20,6 @@ const colours = [
   '#e7177e',
 ];
 
-watch(() => word_suggestions, () => {
-  updateWordSuggestionColors();
-})
 onMounted(() => {
   updateWordSuggestionColors();
 })
@@ -33,7 +34,12 @@ function updateWordSuggestionColors() {
   }
 }
 
-function wordClicked(e) {
+function wordClicked(word) {
+  if (word) {
+    messageStore.generateWordSuggestionsFromNewTopic(word)
+    messageStore.generateSentenceSuggestionsFromNewTopic(word)
+    messageStore.messageTab = 'build'
+  }
 }
 
 </script>
@@ -49,18 +55,24 @@ function wordClicked(e) {
           hide-details
           density="comfortable"
           placeholder="✍️ New topic"
+          v-model="newSuggestion"
+          @keydown.enter="wordClicked(newSuggestion); newSuggestion = ''"
       >
         <template v-slot:append-inner>
-          <v-icon id="sendButton">mdi-auto-fix</v-icon>
+          <v-icon
+              id="extra-word"
+              @click.stop="wordClicked(newSuggestion); newSuggestion = ''">
+            mdi-auto-fix
+          </v-icon>
         </template>
       </v-text-field>
     </div>
     <div
-        class="word-suggestion"
-        v-for="(word, index) in word_suggestions"
+        class="word-suggestion raised"
+        v-for="(word, index) in wordSuggestions"
         :key="index"
         tabindex="0"
-        @click="wordClicked">
+        @click="wordClicked(word)">
       {{ word }}
     </div>
   </div>
@@ -76,9 +88,9 @@ function wordClicked(e) {
   flex-wrap: wrap;
   gap: 10px;
   padding: 5px 25px;
-  align-content: center;
+  align-content: safe center;
   align-items: center;
-  justify-content: center;
+  justify-content: safe center;
 }
 
 .word-suggestion {
@@ -86,7 +98,7 @@ function wordClicked(e) {
   width: fit-content;
   padding: 5px 15px;
   border-radius: 1.5em;
-  color: theme.$text-color-primary;
+  color: theme.$text-color;
   height: 22px;
   border: 2px solid grey;
   cursor: pointer;
@@ -96,8 +108,19 @@ function wordClicked(e) {
   width: 150px;
 }
 
+#extra-word {
+  cursor: pointer;
+
+  &:hover {
+    color: #dea104;
+  }
+  &:active {
+    color: darken(#dea104, 5%);
+  }
+}
+
 .extra-words-input {
-  background-color: theme.$ossia-light-background-1;
+  background-color: theme.$occam-light-background-1;
 
   &:deep(.v-field) {
     border: 2px solid #ecc502;
@@ -116,7 +139,7 @@ function wordClicked(e) {
 
   &:deep(.v-btn__content) {
     display: flex;
-    color: theme.$text-color-primary;
+    color: theme.$text-color;
     gap: 5px;
   }
 }

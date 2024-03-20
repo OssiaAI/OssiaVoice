@@ -1,41 +1,42 @@
 <script setup>
-import {ref} from "vue";
 import MessageBubble from "@/components/InterpreterView/MessageHistory/components/MessageBubble.vue";
+import {useMessageStore} from "@/stores/MessageStore.js";
 
-const messages = ref([
-  {"role": "system", "content": "SystemContext"},
-  {"role": "user", "content": "Message content"},
-  {"role": "assistant", "content": "Message content"},
-  {"role": "user", "content": "Message content"},
-  {"role": "assistant", "content": "Message content"},
-  {"role": "user", "content": "Message content"},
-  {"role": "assistant", "content": "Message content"},
-  {"role": "assistant", "content": "Message content"},
-  {"role": "user", "content": "Message content"},
-  {"role": "assistant", "content": "Message content"},
-]);
+const messageStore = useMessageStore()
+
 </script>
 
 <template>
   <div id="messageWindow">
-    <div v-for="(message, index) in messages" :key="index">
+    <div v-if="Object.entries(messageStore.messageHistory).length === 0" id="placeholder">
+      Message history will appear here
+    </div>
+    <div v-else v-for="(message, index) in messageStore.messageHistory.slice().reverse()" :key="index">
       <message-bubble :message="message"/>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 @use '@/assets/theme';
+
+#placeholder {
+  font-style: italic;
+  color: theme.$text-color-inverted-muted;
+  width: fit-content;
+  margin: 20px auto;
+  text-align: center;
+}
 
 #messageWindow {
   max-height: 100%;
-  //box-shadow: inset 0 0 15px #dedcdc;
   width: 100%;
   height: 60vh;
   margin: auto;
   overflow: auto;
   padding: 10px 20px;
-  //border-left-width: 1px; //border-left-style: solid;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 </style>

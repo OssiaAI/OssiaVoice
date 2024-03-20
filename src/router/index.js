@@ -8,12 +8,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Ossia - Interpreter',
+      name: 'Occam - Interpreter',
       component: InterpreterView
     },
     {
       path: '/about',
-      name: 'Ossia - About',
+      name: 'Occam - About',
       component: AboutView
     }
   ]

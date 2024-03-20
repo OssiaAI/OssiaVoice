@@ -1,17 +1,17 @@
 <script setup>
-import {ref} from "vue";
 import BuildSentence from "@/components/InterpreterView/MessageBuilder/tabs/BuildSentence.vue";
 import EditSentence from "@/components/InterpreterView/MessageBuilder/tabs/EditSentence.vue";
 import NewSentence from "@/components/InterpreterView/MessageBuilder/tabs/NewSentence.vue";
+import {useMessageStore} from "@/stores/MessageStore.js";
 
-const tab = ref('build')
+const messageStore = useMessageStore()
 
 </script>
 
 <template>
   <div id="message-builder-container">
     <div id="tab-group">
-      <v-tabs id="tabs" v-model="tab">
+      <v-tabs id="tabs" v-model="messageStore.messageTab">
         <v-tab value="build">
           <v-icon size="30" icon="mdi-comment-flash-outline"/>
         </v-tab>
@@ -25,9 +25,9 @@ const tab = ref('build')
     </div>
 
     <div id="builder-controls">
-      <BuildSentence v-if="tab === 'build'"/>
-      <EditSentence v-else-if="tab === 'edit'"/>
-      <NewSentence v-else-if="tab === 'new'"/>
+      <BuildSentence v-if="messageStore.messageTab === 'build'"/>
+      <EditSentence v-else-if="messageStore.messageTab === 'edit'"/>
+      <NewSentence v-else-if="messageStore.messageTab === 'new'"/>
     </div>
 
   </div>
@@ -46,6 +46,7 @@ const tab = ref('build')
 #builder-controls {
   display: flex;
   overflow: auto;
+  justify-content: center;
   flex-grow: 1;
 }
 
