@@ -58,8 +58,8 @@ function editAllMessages() {
       <br/>
       Select one or 'edit all' to apply</em>
     <div class="message-suggestion-container">
-      <div @click="submitMessage(sentence)"
-           v-for="(sentence, index) in messageStore.sentenceSuggestions" :key="index"
+      <div v-for="(sentence, index) in messageStore.sentenceSuggestions" :key="index"
+           @click="submitMessage(sentence, messageStore.editInstruction)"
            class="message-suggestion raised"
            tabindex="0">
         {{ sentence }}
