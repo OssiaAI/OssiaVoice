@@ -22,21 +22,25 @@ function submitInterlocutorMessage() {
         <v-text-field
             label="Message"
             hide-details
-            id="message-input"
+            id="interlocutor-message-input"
             v-model="messageStore.interlocutorPhrase"
             @keydown.enter="submitInterlocutorMessage"
             density="comfortable"
+            flat
         >
         </v-text-field>
         <div id="send-icon-wrapper">
           <v-icon id="send-icon" icon="mdi-send" @click.stop="submitInterlocutorMessage"/>
         </div>
       </div>
-      <textarea
-          id="context-input"
-          v-model="messageStore.currentContext"
-          placeholder="Context"
-      />
+      <div id="context-input-wrapper">
+        <v-textarea
+            id="context-input"
+            v-model="messageStore.currentContext"
+            placeholder="Context"
+            hide-details
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +54,7 @@ function submitInterlocutorMessage() {
   gap: 5px;
   width: 100%;
   height: 100%;
+  max-height: 100%;
   align-items: center;
   align-content: center;
 }
@@ -87,6 +92,7 @@ function submitInterlocutorMessage() {
   gap: 15px;
   width: 90%;
   max-width: 420px;
+  max-height: calc(100% - 180px);
 }
 
 #message-input-wrapper {
@@ -98,23 +104,14 @@ function submitInterlocutorMessage() {
   }
 }
 
-#context-input {
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-  padding: 16px;
-  min-height: 48px;
-  flex-grow: 1;
-  background-color: rgb(234, 231, 235);
-  border-bottom: 1px solid rgb(152, 153, 159);
-  &:active {
-    border: none;
-    border-bottom: 1px solid rgb(82, 83, 86);
+#context-input-wrapper {
+  height: 110px;
+  &:deep(textarea) {
+    height: 110px;
+    color: theme.$text-color-inverted-muted;
   }
 }
 
-#context-input::placeholder {
-  color: rgb(100, 105, 114);
-}
 
 @media screen and (max-width: 600px), (max-height: 770px) {
 
@@ -122,9 +119,13 @@ function submitInterlocutorMessage() {
     height: 140px;
   }
 
-  #context-input {
-    height: 56px;
+  #context-input-wrapper {
+  height: 65px;
+  &:deep(textarea) {
+    height: 65px;
   }
+}
+
 }
 
 </style>

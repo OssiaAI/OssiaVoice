@@ -10,10 +10,11 @@ export const useMessageStore = defineStore('messages', () => {
   const interlocutorPhrase = ref('')
   const scriberPhrase = ref('')
   const messageHistory = ref([])
-  const previousSuggestions = reactive({})
+  const activeEditHistory = ref([])
   const wordSuggestions = ref([
     'hi', 'how', 'you', 'weather', 'nice', 'hungry', 'dinner', 'today', 'weather', 'i',
     'work', 'rugby', 'jazz', 'cold', 'warm', 'thirsty', 'bored', 'good'])
+  const previousWordSuggestions = ref([])
   const sentenceSuggestions = ref([
     "Hi, how are you doing?", "What's on for your day?",
     "I'm a little cold", "Get up to anything interesting today?"])
@@ -27,14 +28,18 @@ export const useMessageStore = defineStore('messages', () => {
     const command = `Given the conversation history, generate a list of 3 to 5 short generic sentences the 
       assistant may want to say`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   async function generateWords() {
     const command = `Given the conversation history, generate a short list of key words and connector words or 
     very short phrases the assistant can select from to build a new sentence`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, true, false)
+      true, false)
   }
 
   // Build Sentences
@@ -42,14 +47,18 @@ export const useMessageStore = defineStore('messages', () => {
     const command = `Given the following list of words, generate between 3-5 sentences that the assistant 
     might be trying to say. Keep them generic:\n${words}`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   async function generateMoreWordsFromWords(words) {
     const command = `Given the following list of words, generate another list of related words that the 
     assistant could select from to build a sentence:\n${words}`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, true, false)
+      true, false)
   }
 
   // New Sentence
@@ -57,52 +66,72 @@ export const useMessageStore = defineStore('messages', () => {
     const command = `Generate a short list of key words and connector words the 
       assistant can select from to build a new sentence, based around a new topic: '${topic}'`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, true, false)
+      true, false)
   }
 
   async function generateSentenceSuggestionsFromNewTopic(topic) {
     const command = `Generate a list of 3 to 5 short generic sentences the 
       assistant may want to say, based around a new topic: '${topic}'`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   // Edit Sentence
   async function editSingleResponseWithHint(response, hint) {
-    const command = `Given the conversation history, and your previous suggestion below:\n'${response}'\n\n 
-    provide 3 to 5 modified suggestions using the following hint:\n'${hint}'`
-    sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+    const command = `The response '${response}' was close, but change it slightly using the following hint':
+    \n'${hint}'`
+    const messages = messageHistory.value.concat(activeEditHistory.value)
+    sentenceSuggestions.value = await client.getResponse(messages, command, currentContext.value,
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   async function editAllResponsesWithHint(hint) {
-    const command = `Given the conversation history, and your previous suggestions below:
-    \n'${previousSuggestions}'\n\n 
-    provide 3 to 5 modified suggestions using the following hint:\n'${hint}'`
-    sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+    const command = `Try again, using the following hint:\n'${hint}'`
+    const messages = messageHistory.value.concat(activeEditHistory.value)
+    sentenceSuggestions.value = await client.getResponse(messages, command, currentContext.value,
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   // Generate Response
   async function generateNewResponses() {
-    const command = `Given the conversation history, and your previous suggestions below:
-    \n'${previousSuggestions}'\n\n provide 3 to 5 alternative suggestions`
-    sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+    const command = `Try again, providing 3 to 5 alternative suggestions`
+    const messages = messageHistory.value.concat(activeEditHistory.value)
+    sentenceSuggestions.value = await client.getResponse(messages, command, currentContext.value,
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   async function generateWordSuggestionsFromHint(hint) {
     const command = `Given the conversation history, generate a short list of key words and connector words or 
     very short phrases the assistant can select from to build a new sentence, based on the hint: '${hint}'`
     wordSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, true, false)
+      true, false)
   }
 
   async function generateSentenceSuggestionsFromHint(hint) {
     const command = `Given the conversation history, generate a list of 3 to 5 short generic sentences the 
       assistant may want to say, based on the hint: '${hint}'`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
-      previousSuggestions, false, true)
+      false, true)
+    activeEditHistory.value = activeEditHistory.value.concat([
+      {role: "system", content: command},
+      {role: "assistant", content: `{"suggestions": ["${sentenceSuggestions.value.join('", "')}"]}`}
+    ])
   }
 
   return {
@@ -112,8 +141,8 @@ export const useMessageStore = defineStore('messages', () => {
     interlocutorPhrase,
     scriberPhrase,
     messageHistory,
-    previousSuggestions,
     wordSuggestions,
+    previousWordSuggestions,
     sentenceSuggestions,
     editInstruction,
     generateSentences,

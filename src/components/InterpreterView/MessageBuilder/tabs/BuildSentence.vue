@@ -7,7 +7,6 @@ const messageStore = useMessageStore()
 const wordObjects = reactive({"words": new Set([])})
 const previousWordObjects = reactive({"words": new Set([])})
 const newWord = ref('')
-let temp
 
 const colours = [
   '#01b476',
@@ -29,10 +28,12 @@ onMounted(() => {
 })
 
 function updateWordSuggestions() {
-  temp = new Set(messageStore.wordSuggestions.map((word, index) => {
+  let tempWordObjects
+  tempWordObjects = new Set(messageStore.wordSuggestions.map((word, index) => {
     return {'word': word, 'active': false, 'color': colours[index % colours.length]}
   }))
-  wordObjects.words = new Set([...temp, ...previousWordObjects.words])
+  wordObjects.words = new Set([...tempWordObjects, ...previousWordObjects.words])
+  previousWordObjects.words = new Set()
 }
 
 function toggleActive(event, item) {
@@ -40,16 +41,10 @@ function toggleActive(event, item) {
 }
 
 function submitGenerateSentence() {
-  let selectedWordObjects = [...wordObjects.words].filter((messageObject) => {
-    if (messageObject.active) {
-      return messageObject
-    }
-  })
-  let wordList = Object.values(selectedWordObjects).map((wordObject) => {
-    return wordObject.word
-  })
+  let selectedWordObjects = [...wordObjects.words].filter(messageObject => messageObject.active)
+  let wordList = selectedWordObjects.map(wordObject => wordObject.word)
   if (wordList.length > 0) {
-    previousWordObjects.words = selectedWordObjects
+    previousWordObjects.words = new Set(selectedWordObjects)
     messageStore.generateSentencesFromWords(wordList)
     messageStore.generateMoreWordsFromWords(wordList)
   }

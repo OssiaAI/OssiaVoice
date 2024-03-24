@@ -25,9 +25,11 @@ const messageStore = useMessageStore()
     </div>
 
     <div id="builder-controls">
-      <BuildSentence v-if="messageStore.messageTab === 'build'"/>
-      <EditSentence v-else-if="messageStore.messageTab === 'edit'"/>
-      <NewSentence v-else-if="messageStore.messageTab === 'new'"/>
+      <div id="div-border">
+        <BuildSentence v-if="messageStore.messageTab === 'build'"/>
+        <EditSentence v-else-if="messageStore.messageTab === 'edit'"/>
+        <NewSentence v-else-if="messageStore.messageTab === 'new'"/>
+      </div>
     </div>
 
   </div>
@@ -47,7 +49,13 @@ const messageStore = useMessageStore()
   display: flex;
   overflow: auto;
   justify-content: center;
+  align-items: safe center;
   flex-grow: 1;
+}
+
+#div-border {
+  padding: 5px;
+  height: fit-content
 }
 
 #tabs {

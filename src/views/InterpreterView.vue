@@ -21,7 +21,8 @@ const loadingStore = useLoadingStore()
     <div id="bottom-panel">
       <v-progress-linear
           v-if="loadingStore.newSentenceLoading || loadingStore.newWordsLoading"
-          indeterminate rounded color="primary"/>
+          indeterminate rounded color="primary"
+          id="progressLoading"/>
       <div id="message-panels">
         <div id="message-builder" tabindex="0" class="tabbable">
           <MessageBuilder/>
@@ -49,6 +50,7 @@ const loadingStore = useLoadingStore()
   display: flex;
   width: 100%;
   height: 45dvh;
+  max-height: 45dvh;
   flex-grow: 1;
   align-items: stretch;
   border-bottom-width: 1px;
@@ -57,21 +59,29 @@ const loadingStore = useLoadingStore()
 
 #bottom-panel {
   height: 55dvh;
+  max-height: 55dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   width: 100vw;
   z-index: 1;
 }
 
+#progressLoading{
+  min-height: 4px;
+}
+
 #message-panels {
   display: flex;
-  height: 100%;
+  flex-grow: 1;
+  max-height: calc(100% - 4px);
 }
 
 #interlocutor-panel {
   background: theme.$occam-light-background-2;
   padding: 10px;
   height: 100%;
+  max-height: 100%;
   width: 50%;
   max-width: 550px;
   overflow: auto;
@@ -88,6 +98,7 @@ const loadingStore = useLoadingStore()
   height: 100%;
   width: 50%;
   overflow: auto;
+  flex-grow: 1;
 }
 
 #separator {
@@ -99,9 +110,11 @@ const loadingStore = useLoadingStore()
 }
 
 #message-options {
-  height: 100%;
+  max-height: 100%;
   width: calc(50% - 2px);
+  flex-grow: 1;
   display: flex;
+  overflow: auto;
   justify-items: stretch;
   background-color: theme.$occam-light-background-1;
 }
@@ -110,10 +123,12 @@ const loadingStore = useLoadingStore()
 
   #top-panel {
     height: 37dvh;
+    max-height: 37dvh;
   }
 
   #bottom-panel {
     height: 63dvh;
+    max-height: 63dvh;
   }
 
   #message-panels {

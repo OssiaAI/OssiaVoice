@@ -15,7 +15,7 @@ export class ChatOpenAI {
     this.systemMessage = {role: "system", content: systemMessage};
   }
 
-  async getResponse(messageHistory, command, context = null, previousSuggestions = null, wordLoading = false,
+  async getResponse(messageHistory, command, context = null, wordLoading = false,
                     sentenceLoading = false) {
     const loadingStore = useLoadingStore()
     if (wordLoading) { loadingStore.newWordsLoading++ }
@@ -30,9 +30,6 @@ export class ChatOpenAI {
       if (context) {
         finalCommand += `Here is some background context to the users current situation. You do not necessarily 
       need to use it:\n"${context}\n\n"`
-      }
-      if (Object.keys(previousSuggestions).length !== 0) {
-        finalCommand += `Your previous suggestions were:\n"${previousSuggestions}\n\n"`
       }
       finalCommand += command
       messages = messages.concat([{role: "system", content: finalCommand}])
