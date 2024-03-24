@@ -141,6 +141,7 @@ export const useMessageStore = defineStore('messages', () => {
     interlocutorPhrase,
     scriberPhrase,
     messageHistory,
+    activeEditHistory,
     wordSuggestions,
     previousWordSuggestions,
     sentenceSuggestions,

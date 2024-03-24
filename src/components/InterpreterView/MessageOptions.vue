@@ -12,6 +12,7 @@ function submitMessage(sentence, hint) {
   else if (sentence) {
     messageStore.messageHistory.push({role: "assistant", content: sentence})
     speak(sentence)
+    messageStore.activeEditHistory = []
   }
   else if (hint) {
     messageStore.generateWordSuggestionsFromHint(hint)
