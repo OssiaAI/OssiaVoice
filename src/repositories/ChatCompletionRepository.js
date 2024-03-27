@@ -7,7 +7,7 @@ export class ChatOpenAI {
   constructor(systemMessage) {
     let auth_token = import.meta.env.VITE_API_OPENAI_TOKEN
     if (!auth_token) {
-      auth_token = prompt('Enter API Key\n\nSee help on how to generate one at the link below:\n\nhttps://platform.openai.com/docs/quickstart/account-setup\n\nWe suggest you also suggest spending limits to control costs')
+      auth_token = prompt('Enter API Key\n\nSee help on how to generate one at the link below:\n\nhttps://platform.openai.com/docs/quickstart/account-setup\n\nWe suggest you also set spending limits to control costs')
     }
     this.client = new OpenAI({
       apiKey: auth_token, dangerouslyAllowBrowser: true
