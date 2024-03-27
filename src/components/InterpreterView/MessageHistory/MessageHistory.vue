@@ -11,7 +11,7 @@ const messageStore = useMessageStore()
     <div v-if="Object.entries(messageStore.messageHistory).length === 0" id="placeholder">
       Message history will appear here
     </div>
-    <div v-else v-for="(message, index) in messageStore.messageHistory.slice().reverse()" :key="index">
+    <div id="message-bubble-container" v-else v-for="(message, index) in messageStore.messageHistory.slice().reverse()" :key="index">
       <message-bubble :message="message"/>
     </div>
   </div>
@@ -34,9 +34,13 @@ const messageStore = useMessageStore()
   height: 60vh;
   margin: auto;
   overflow: auto;
-  padding: 10px 20px;
+  padding: 10px 10px;
   display: flex;
   flex-direction: column-reverse;
 }
 
+#message-bubble-container {
+  display: flex;
+  flex-direction: column;
+}
 </style>

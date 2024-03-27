@@ -83,6 +83,7 @@ const loadingStore = useLoadingStore()
   height: 100%;
   max-height: 100%;
   width: 50%;
+  min-width: 300px;
   max-width: 550px;
   overflow: auto;
 }
@@ -149,6 +150,14 @@ const loadingStore = useLoadingStore()
     width: 100%;
     height: 50%;
   }
+
+}
+
+@media screen and (max-width: 600px) {
+
+#interlocutor-panel {
+  min-width: 50%;
+}
 
 }
 
