@@ -78,7 +78,7 @@ const loadingStore = useLoadingStore()
 }
 
 #interlocutor-panel {
-  background: theme.$occam-light-background-2;
+  background: theme.$ossia-light-background-2;
   padding: 10px;
   height: 100%;
   max-height: 100%;
@@ -89,13 +89,13 @@ const loadingStore = useLoadingStore()
 }
 
 #message-history {
-  background: theme.$occam-light-background-1;;
+  background: theme.$ossia-light-background-1;;
   height: 100%;
   flex-grow: 1;
 }
 
 #message-builder {
-  background-color: theme.$occam-light-background-1;
+  background-color: theme.$ossia-light-background-1;
   height: 100%;
   width: 50%;
   overflow: auto;
@@ -105,7 +105,7 @@ const loadingStore = useLoadingStore()
 #separator {
   flex-grow: 0;
   width: 2px;
-  background-color: theme.$occam-divider-light-1;
+  background-color: theme.$ossia-divider-light-1;
   height: 70%;
   align-self: center;
 }
@@ -117,7 +117,7 @@ const loadingStore = useLoadingStore()
   display: flex;
   overflow: auto;
   justify-items: stretch;
-  background-color: theme.$occam-light-background-1;
+  background-color: theme.$ossia-light-background-1;
 }
 
 @media (max-width: 600px) {

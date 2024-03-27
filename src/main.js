@@ -15,7 +15,7 @@ import * as directives from 'vuetify/directives'
 
 const app = createApp(App)
 
-const OccamLightTheme = {
+const OssiaLightTheme = {
   dark: false,
   colors: {
     'primary': '#00b600',
@@ -27,9 +27,9 @@ const OccamLightTheme = {
 
 const vuetify = createVuetify({
   theme: {
-    defaultTheme: 'OccamLightTheme',
+    defaultTheme: 'OssiaLightTheme',
     themes: {
-      OccamLightTheme: OccamLightTheme,
+      OssiaLightTheme: OssiaLightTheme,
     },
   },
   icons: {

@@ -120,7 +120,7 @@ function wordClicked(word) {
 }
 
 .extra-words-input {
-  background-color: theme.$occam-light-background-1;
+  background-color: theme.$ossia-light-background-1;
 
   &:deep(.v-field) {
     border: 2px solid #ecc502;

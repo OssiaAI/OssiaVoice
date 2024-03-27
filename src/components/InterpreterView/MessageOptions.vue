@@ -7,6 +7,7 @@ const messageStore = useMessageStore()
 function submitMessage(sentence, hint) {
   if (sentence && hint) {
     messageStore.editSingleResponseWithHint(sentence, hint)
+    messageStore.generateWordsForSingleResponseFromHint(sentence, hint)
     messageStore.editInstruction = null
   }
   else if (sentence) {
@@ -18,12 +19,15 @@ function submitMessage(sentence, hint) {
     messageStore.generateWordSuggestionsFromHint(hint)
     messageStore.generateSentenceSuggestionsFromHint(hint)
   }
+  messageStore.messageTab = 'build'
 }
 
 function editAllMessages() {
   let hint = messageStore.editInstruction
   messageStore.editAllResponsesWithHint(hint)
+  messageStore.generateWordsForAllResponsesFromHint(hint)
   messageStore.editInstruction = null
+  messageStore.messageTab = 'build'
 }
 
 </script>
@@ -36,7 +40,8 @@ function editAllMessages() {
           hide-details
           id="message-input"
           v-model="messageStore.scriberPhrase"
-          @keydown.enter="submitMessage(messageStore.scriberPhrase)"
+          @keydown.enter="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''
+"
           density="comfortable"
           style="max-width: 100%"
       >

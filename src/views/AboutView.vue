@@ -1,7 +1,7 @@
 <template>
   <div class="about">
-    <img src="@/assets/occam-logo.svg" alt="Occam Logo">
-    <h1>Occam</h1>
+    <img src="@/assets/ossia-logo.svg" alt="Ossia Logo">
+    <h1>Ossia</h1>
   </div>
 </template>
 
