@@ -3,13 +3,22 @@ import InterlocutorPanel from "@/components/InterpreterView/InterlocutorPanel.vu
 import MessageHistory from "@/components/InterpreterView/MessageHistory/MessageHistory.vue";
 import MessageBuilder from "@/components/InterpreterView/MessageBuilder/MessageBuilder.vue";
 import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
+import SettingsOverlay from "@/components/InterpreterView/SettingsOverlay.vue";
 import {useLoadingStore} from "@/stores/LoadingStore.js";
+import {useSettingsStore} from "@/stores/SettingsStore.js";
 
 const loadingStore = useLoadingStore()
+const settingStore = useSettingsStore()
 </script>
 
 <template>
   <div id="interpreter-grid">
+    <v-overlay
+        v-model="settingStore.showSettingsOverlay"
+        class="align-center justify-center"
+    >
+      <settings-overlay @close="settingStore.showSettingsOverlay=false"/>
+    </v-overlay>
     <div id="top-panel">
       <div id="interlocutor-panel">
         <InterlocutorPanel/>
@@ -67,7 +76,7 @@ const loadingStore = useLoadingStore()
   z-index: 1;
 }
 
-#progressLoading{
+#progressLoading {
   min-height: 4px;
 }
 
@@ -78,7 +87,6 @@ const loadingStore = useLoadingStore()
 }
 
 #interlocutor-panel {
-  background: theme.$ossia-light-background-2;
   padding: 10px;
   height: 100%;
   max-height: 100%;
@@ -155,9 +163,9 @@ const loadingStore = useLoadingStore()
 
 @media screen and (max-width: 600px) {
 
-#interlocutor-panel {
-  min-width: 50%;
-}
+  #interlocutor-panel {
+    min-width: 50%;
+  }
 
 }
 

@@ -1,11 +1,14 @@
 <script setup>
 import MicButton from "@/components/reusable/MicButton.vue";
 import {useMessageStore} from "@/stores/MessageStore.js";
+import {useSettingsStore} from "@/stores/SettingsStore.js";
+
 const messageStore = useMessageStore()
+const settingStore = useSettingsStore()
 
 function submitInterlocutorMessage() {
   if (messageStore.interlocutorPhrase !== '') {
-    messageStore.messageHistory.push({ role: "user", content: messageStore.interlocutorPhrase})
+    messageStore.messageHistory.push({role: "user", content: messageStore.interlocutorPhrase})
     messageStore.generateWords()
     messageStore.generateSentences()
     messageStore.interlocutorPhrase = ''
@@ -16,11 +19,19 @@ function submitInterlocutorMessage() {
 
 <template>
   <div id="interlocutor-container">
+    <div id="toolbar">
+      <v-btn @click.stop="settingStore.showSettingsOverlay = true" color="transparent" flat size="20" icon="mdi-cog">
+        <v-icon color="grey"></v-icon>
+      </v-btn>
+      <v-btn @click.stop="" color="transparent" flat size="20" icon="mdi-help-circle-outline">
+        <v-icon color="grey"></v-icon>
+      </v-btn>
+    </div>
     <micButton id="mic-btn" v-model="messageStore.interlocutorPhrase" @textAvailable="submitInterlocutorMessage"/>
     <div id="input-wrapper">
       <div id="message-input-wrapper">
         <v-text-field
-            label="Message"
+            placeholder="Message"
             hide-details
             id="interlocutor-message-input"
             v-model="messageStore.interlocutorPhrase"
@@ -49,6 +60,9 @@ function submitInterlocutorMessage() {
 @use '@/assets/theme';
 
 #interlocutor-container {
+  background: theme.$ossia-light-background-2;
+  border-radius: 14px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -57,6 +71,15 @@ function submitInterlocutorMessage() {
   max-height: 100%;
   align-items: center;
   align-content: center;
+  position: relative;
+}
+
+#toolbar {
+  display: flex;
+  left: 10px;
+  gap: 10px;
+  position: absolute;
+  width: fit-content;
 }
 
 #mic-btn {
@@ -80,6 +103,7 @@ function submitInterlocutorMessage() {
   &:hover {
     color: darken(theme.$primary, 5%);
   }
+
   &:active {
     color: darken(theme.$primary, 10%);
   }
@@ -99,32 +123,39 @@ function submitInterlocutorMessage() {
   width: 100%;
   display: flex;
   justify-items: stretch;
+
   &:deep(input) {
     padding-right: 40px;
   }
 }
 
 #context-input-wrapper {
-  height: 110px;
+  height: 90px;
+
   &:deep(textarea) {
-    height: 110px;
-    color: theme.$text-color-inverted-muted;
+    height: 90px;
   }
 }
 
 
 @media screen and (max-width: 600px), (max-height: 770px) {
 
+  #toolbar {
+    width: calc(100% - 20px);
+    justify-content: space-between;
+  }
+
   #mic-btn {
-    height: 140px;
+    height: 120px;
   }
 
   #context-input-wrapper {
-  height: 65px;
-  &:deep(textarea) {
-    height: 65px;
+    height: 60px;
+
+    &:deep(textarea) {
+      height: 60px;
+    }
   }
-}
 
 }
 
