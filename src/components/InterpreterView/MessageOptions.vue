@@ -71,12 +71,13 @@ function editAllMessages() {
         {{ sentence }}
       </div>
         <span v-if="messageStore.editInstruction"
-              class="message-suggestion message-action-btn raised"
+              class="message-action-btn message-suggestion raised"
               @click.stop="editAllMessages">
+          <v-icon icon="mdi-pencil"/>
           Edit all
         </span>
         <span v-if="messageStore.editInstruction"
-              class="message-suggestion message-action-btn raised"
+              class="message-action-btn message-suggestion raised"
               @click.stop="messageStore.editInstruction = null">
           <v-icon icon="mdi-close"/>
         </span>
@@ -157,41 +158,45 @@ function editAllMessages() {
   overflow: auto;
 }
 
+.message-action-btn {
+  border: 2px solid theme.$primary !important;
+  background-color: theme.$primary !important;
+  color: theme.$text-color !important;
+
+  & > i {
+    color: theme.$text-color;
+  }
+}
+
 .message-suggestion {
-  background-color: theme.$primary;
+  background-color: theme.$background;
   box-sizing: content-box;
-  color: theme.$text-color;
+  color: theme.$text-color-inverted;
   height: fit-content(20%);
   max-width: 33%;
   padding: 5px 15px;
+  border-width: 2px;
+  border-style: solid;
   border-radius: 1.5em;
   cursor: pointer;
 
   &:hover {
-    background-color: darken(theme.$primary, 5%);
+    background-color: darken(theme.$background, 4%);
   }
 
   &:active {
-    background-color: darken(theme.$primary, 10%);
+    background-color: darken(theme.$background, 8%);
   }
 }
 
-.message-action-btn {
-  border: 2px solid theme.$primary;
-  background-color: transparent;
-  color: theme.$text-color-inverted;
-
-  & > i {
-    color: theme.$text-color-inverted;
-  }
-
-  &:hover {
-    background-color: darken(theme.$background, 5%);
-  }
-
-  &:active {
-    background-color: darken(theme.$background, 10%);
-  }
-}
+.message-suggestion:nth-of-type(7n+1) {border-color: #01b476;}
+.message-suggestion:nth-of-type(7n+2) {border-color: #ef470b;}
+.message-suggestion:nth-of-type(7n+3) {border-color: #00a6ff;}
+.message-suggestion:nth-of-type(7n+4) {border-color: #e56408;}
+.message-suggestion:nth-of-type(7n+5) {border-color: #2e32d7;}
+.message-suggestion:nth-of-type(7n+6) {border-color: #00b600;}
+.message-suggestion:nth-of-type(7n+7) {border-color: #db47e5;}
+.message-suggestion:nth-of-type(7n+8) {border-color: #dea104;}
+.message-suggestion:nth-of-type(7n+9) {border-color: #e7177e;}
 
 </style>

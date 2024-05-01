@@ -19,7 +19,9 @@ document.body.appendChild(style)
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use '@/assets/theme';
+
 #word-chip {
   box-sizing: content-box;
   width: fit-content;
