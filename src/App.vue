@@ -4,7 +4,6 @@
 <template>
   <main>
     <RouterView/>
-<!--    <InterpreterView/>-->
   </main>
 </template>
 

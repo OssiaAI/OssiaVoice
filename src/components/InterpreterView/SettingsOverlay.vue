@@ -12,6 +12,9 @@ const showOpenAIKey = ref(false)
 <template>
   <div id="overlay-container">
     <div id="overlay">
+      <div id="accept-terms-prompt" v-if="settingsStore.showSettingsWarning">
+        You must enter an OpenAI API Key (and accept the terms and conditions) before Ossia Voice can do anything smart!
+      </div>
       <div id="scrollable">
         <h2 class="title">Welcome to Ossia</h2>
         <div class="group-content">
@@ -45,7 +48,8 @@ const showOpenAIKey = ref(false)
           <h3 class="subheading"><span style="color: red">*</span> User Backstory</h3>
           Describe the user in as much detail as possible. e.g. name, hobbies, political leaning, temperament, family
           and close friends etc.
-          <span id="example-link" @click="settingsStore.backstory = settingsStore.exampleBackstory">Or use an example</span>
+          <span id="example-link"
+                @click="settingsStore.backstory = settingsStore.exampleBackstory">Or use an example</span>
           <div id="backstory-input-wrapper">
             <v-textarea id="backstory-input" label="user backstory" v-model="settingsStore.backstory" hide-details/>
           </div>
@@ -66,27 +70,45 @@ const showOpenAIKey = ref(false)
           most. Thoughts, ideas and contributions are very much welcomed. Please reach out if you would like to be
           involved!
           <div id="contact-links">
-            <a href="https://twitter.com/arneyjfs" rel="noopener noreferrer"
-               target="_blank"><v-icon>mdi-twitter</v-icon></a>
-            <a href="https://github.com/OssiaAI/OssiaVoice" rel="noopener noreferrer"
-               target="_blank"><v-icon>mdi-github</v-icon></a>
-            <a href="https://www.linkedin.com/in/james-arney-50246711a/" rel="noopener noreferrer"
-               target="_blank"><v-icon>mdi-linkedin</v-icon></a>
+            <a href="https://twitter.com/arneyjfs" rel="noopener noreferrer" target="_blank">
+              <v-icon>mdi-twitter</v-icon>
+            </a>
+            <a href="https://github.com/OssiaAI/OssiaVoice" rel="noopener noreferrer" target="_blank">
+              <v-icon>mdi-github</v-icon>
+            </a>
+            <a href="https://www.linkedin.com/in/james-arney-50246711a/" rel="noopener noreferrer" target="_blank">
+              <v-icon>mdi-linkedin</v-icon>
+            </a>
           </div>
+
+          <!--          <a id="buy-me-a-coffee" class="raised" href="https://www.buymeacoffee.com/arneyjfs" target="_blank"-->
+          <!--             rel="noopener noreferrer">-->
+          <!--            <img-->
+          <!--                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"-->
+          <!--                alt="Buy Me A Coffee"-->
+          <!--            >-->
+          <!--          </a>-->
 
           © James Arney, 2024
         </div>
       </div>
-      <v-btn
-          id="save-btn"
-          :disabled="!(settingsStore.liabilityAgreement &&
+      <div id="bottom-buttons">
+        <v-btn
+            id="complete-later-btn"
+            @click="emit('close')">
+          Complete later
+        </v-btn>
+        <v-btn
+            id="save-btn"
+            :disabled="!(settingsStore.liabilityAgreement &&
                      settingsStore.cookieAgreement &&
                      settingsStore.openAIAPIKey &&
                      settingsStore.backstory
                      )"
-          @click="emit('close'); settingsStore.save()">
-        Let's Go
-      </v-btn>
+            @click="emit('close'); settingsStore.save()">
+          Let's Go
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -121,6 +143,14 @@ const showOpenAIKey = ref(false)
 .title {
   color: darken(theme.$primary, 10%);
   margin: 10px 0 0 10px;
+}
+
+#accept-terms-prompt{
+  background: orange;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
 }
 
 #scrollable {
@@ -184,15 +214,54 @@ a {
   padding: 10px 0px;
 }
 
+#bottom-buttons {
+  display: flex;
+  justify-content: end;
+}
+
+#complete-later-btn {
+  background: #e1e1e1;
+  width: 150px;
+  height: 40px;
+  margin: 10px 10px 0 20px;
+  text-transform: none;
+
+  //&:deep(span) {
+  //  color: theme.$text-color;
+  //}
+}
+
 #save-btn {
   background: theme.$primary;
-  bottom: 0;
   width: 130px;
   height: 40px;
-  margin: 10px 20px 10px auto;
+  margin: 10px 20px 0 10px;
+  text-transform: none;
+
 
   &:deep(span) {
     color: theme.$text-color;
+  }
+}
+
+#buy-me-a-coffee {
+  margin: 10px 0 20px 0;
+  width: 145px;
+  height: 40px;
+  border-radius: 7px;
+  position: relative;
+
+  &:deep(img) {
+    width: 145px;
+    height: 40px;
+
+    &:hover {
+      filter: brightness(98%)
+    }
+
+    &:active {
+      filter: brightness(95%)
+    }
   }
 }
 

@@ -31,7 +31,6 @@ export default async function speak(text) {
   //   return voice.name === 'Aaron';
   // })[0];
   msg.voice = window.voice;
-  console.log(msg.voice);
   // Queue this utterance.
   window.speechSynthesis.cancel();  // stop saying anything else
   window.speechSynthesis.speak(msg);

@@ -3,6 +3,9 @@ import {ref} from "vue";
 import micImg from '@/assets/mic-button/mic.svg'
 import micHoverImg from '@/assets/mic-button/mic-hover.svg'
 import micActiveImg from '@/assets/mic-button/mic-active.svg'
+import {AlertStore} from "@/stores/AlertStore.js";
+
+const alertStore = AlertStore();
 
 const micActive = ref(false)
 const micBtnImage = ref(micImg)
@@ -61,10 +64,8 @@ function startRecognition() {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
           model.value = transcript
-          console.log(`Final recognition: ${transcript}`)
         }
         else {
-          console.log(`interim recognition: ${transcript}`)
           interimTranscript += transcript
           model.value = interimTranscript
         }
@@ -72,7 +73,7 @@ function startRecognition() {
     }
 
     recognition.onerror = event => {
-      console.log("Error occurred in recognition: " + event.error)
+      alertStore.showAlert('error', "Error occurred in recognition", event.error)
     }
 }
 

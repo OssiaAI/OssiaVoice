@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import {useLoadingStore} from "@/stores/LoadingStore.js";
 import {useSettingsStore} from "@/stores/SettingsStore.js";
+import {AlertStore} from "@/stores/AlertStore.js";
 
 const model = "gpt-4-turbo-preview" // "gpt-4-turbo-preview" // "gpt-3.5-turbo-0125" //
 
@@ -8,6 +9,14 @@ export async function getResponse(messageHistory, command, wordLoading = false,
                                   sentenceLoading = false) {
   const loadingStore = useLoadingStore()
   const settingStore = useSettingsStore()
+  const alertStore = AlertStore()
+
+  console.log('API', settingStore.openAIAPIKey)
+  if (!(settingStore.openAIAPIKey && settingStore.backstory && settingStore.liabilityAgreement)) {
+    settingStore.showSettingsOverlay = true
+    settingStore.showSettingsWarning = true
+    return
+  }
 
   let client = new OpenAI({
     apiKey: settingStore.openAIAPIKey, dangerouslyAllowBrowser: true
@@ -39,15 +48,19 @@ export async function getResponse(messageHistory, command, wordLoading = false,
 
     finalCommand += command
     messages = messages.concat([{role: "system", content: finalCommand}])
-    const completion = await client.chat.completions.create({
-      messages,
-      model: model,
-      temperature: 0.5,
-      top_p: 0.5,
-      response_format: {"type": "json_object"}
-    });
+    try {
+      const completion = await client.chat.completions.create({
+        messages,
+        model: model,
+        temperature: 0.5,
+        top_p: 0.5,
+        response_format: {"type": "json_object"}
+      });
+      return JSON.parse(completion.choices[0].message.content)['suggestions']
+    } catch (err) {
+      alertStore.showAlert('error', `Error (${err.type})`, err.message)
+    }
 
-    return JSON.parse(completion.choices[0].message.content)['suggestions']
   } finally {
     if (wordLoading) {
       loadingStore.newWordsLoading--

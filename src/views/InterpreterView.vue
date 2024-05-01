@@ -6,6 +6,7 @@ import MessageOptions from "@/components/InterpreterView/MessageOptions.vue";
 import SettingsOverlay from "@/components/InterpreterView/SettingsOverlay.vue";
 import {useLoadingStore} from "@/stores/LoadingStore.js";
 import {useSettingsStore} from "@/stores/SettingsStore.js";
+import ErrorHandling from "@/components/reusable/AlertHandling.vue";
 
 const loadingStore = useLoadingStore()
 const settingStore = useSettingsStore()
@@ -42,6 +43,7 @@ const settingStore = useSettingsStore()
         </div>
       </div>
     </div>
+    <error-handling/>
   </div>
 </template>
 

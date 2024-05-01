@@ -140,22 +140,35 @@ assistant:
   const cookieAgreement = ref(localStorage.getItem('cookieAgreement') === "true" || false)
 
   function save() {
+    if (!(cookieAgreement.value && liabilityAgreement.value)) {
+      showSettingsOverlay.value = true
+      showSettingsWarning.value = true
+      return
+    }
     localStorage.setItem('openAIAPIKey', openAIAPIKey.value)
     localStorage.setItem('context', context.value)
     localStorage.setItem('backstory', backstory.value)
     localStorage.setItem('liabilityAgreement', liabilityAgreement.value.toString())
     localStorage.setItem('cookieAgreement', cookieAgreement.value.toString())
+    showSettingsWarning.value = false
     console.log('settings saved')
   }
 
   watch(context, async (newContext) => {
+    if (!(cookieAgreement.value && liabilityAgreement.value)) {
+      showSettingsOverlay.value = true
+      showSettingsWarning.value = true
+      return
+    }
     localStorage.setItem('context', newContext)
   })
 
   const showSettingsOverlay = ref(!(liabilityAgreement.value && cookieAgreement.value))
+  const showSettingsWarning = ref(false)
 
   return {
     showSettingsOverlay,
+    showSettingsWarning,
     openAIAPIKey,
     context,
     backstory,
