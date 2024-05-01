@@ -1,11 +1,11 @@
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import {defineStore} from 'pinia'
 
 export const useSettingsStore = defineStore('settings', () => {
 
-  const openAIAPIKey = ref(localStorage.getItem('openAIAPIKey'))
-  const context = ref(localStorage.getItem('context'))
-  const backstory = ref(localStorage.getItem('backstory'))
+  const openAIAPIKey = ref(localStorage.getItem('openAIAPIKey') || '')
+  const context = ref(localStorage.getItem('context') || '')
+  const backstory = ref(localStorage.getItem('backstory') || '')
 
   const exampleContext = ref(
     `Time: 20:37
@@ -32,8 +32,8 @@ senses pity.
 - Religion: None.
 `)
 
-  const instructionPrompt = ref(
-    `
+  function getSystemMessage() {
+    return `
 You are an AI Bot for someone living with Motor Neurone Disease (MND) (hereafter referred to as the 'assistant'). You 
 receive a conversation between the assistant and another person (the 'user') . Your job 
 is to suggest various likely short sentences that the assistant might want to say to continue the conversation, or a short 
@@ -132,7 +132,8 @@ assistant:
     "please",
   ]
 }
-`)
+`
+  }
 
   const liabilityAgreement = ref(localStorage.getItem('liabilityAgreement') === "true" || false)
 
@@ -142,10 +143,14 @@ assistant:
     localStorage.setItem('openAIAPIKey', openAIAPIKey.value)
     localStorage.setItem('context', context.value)
     localStorage.setItem('backstory', backstory.value)
-    localStorage.setItem('liabilityAgreement', liabilityAgreement.value)
-    localStorage.setItem('cookieAgreement', cookieAgreement.value)
+    localStorage.setItem('liabilityAgreement', liabilityAgreement.value.toString())
+    localStorage.setItem('cookieAgreement', cookieAgreement.value.toString())
     console.log('settings saved')
   }
+
+  watch(context, async (newContext) => {
+    localStorage.setItem('context', newContext)
+  })
 
   const showSettingsOverlay = ref(!(liabilityAgreement.value && cookieAgreement.value))
 
@@ -156,7 +161,7 @@ assistant:
     backstory,
     exampleContext,
     exampleBackstory,
-    instructionPrompt,
+    getSystemMessage,
     liabilityAgreement,
     cookieAgreement,
     save,

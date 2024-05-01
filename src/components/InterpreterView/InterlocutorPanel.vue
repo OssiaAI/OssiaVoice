@@ -44,7 +44,9 @@ function submitInterlocutorMessage() {
       <div id="context-input-wrapper">
         <v-textarea
             id="context-input"
-            v-model="messageStore.currentContext"
+            variant="solo"
+            flat
+            v-model="settingStore.context"
             placeholder="Context"
             hide-details
         />
@@ -58,7 +60,7 @@ function submitInterlocutorMessage() {
 
 #interlocutor-container {
   background: theme.$ossia-light-background-2;
-  border-radius: 14px;
+  border-radius: 7px;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -126,6 +128,10 @@ function submitInterlocutorMessage() {
   }
 }
 
+.v-text-field:deep(input) {
+  background: white;
+}
+
 #context-input-wrapper {
   height: 90px;
 
@@ -134,6 +140,14 @@ function submitInterlocutorMessage() {
   }
 }
 
+.v-textarea {
+  &:deep(.v-field__overlay) {
+    display: none;
+  }
+  &:deep(textarea) {
+    background: white;
+  }
+}
 
 @media screen and (max-width: 600px), (max-height: 770px) {
 
