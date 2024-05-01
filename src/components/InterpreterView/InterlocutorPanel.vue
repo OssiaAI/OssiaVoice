@@ -23,9 +23,6 @@ function submitInterlocutorMessage() {
       <v-btn @click.stop="settingStore.showSettingsOverlay = true" color="transparent" flat size="20" icon="mdi-cog">
         <v-icon color="grey"></v-icon>
       </v-btn>
-      <v-btn @click.stop="" color="transparent" flat size="20" icon="mdi-help-circle-outline">
-        <v-icon color="grey"></v-icon>
-      </v-btn>
     </div>
     <micButton id="mic-btn" v-model="messageStore.interlocutorPhrase" @textAvailable="submitInterlocutorMessage"/>
     <div id="input-wrapper">
@@ -139,11 +136,6 @@ function submitInterlocutorMessage() {
 
 
 @media screen and (max-width: 600px), (max-height: 770px) {
-
-  #toolbar {
-    width: calc(100% - 20px);
-    justify-content: space-between;
-  }
 
   #mic-btn {
     height: 120px;

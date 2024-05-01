@@ -45,7 +45,7 @@ export const useMessageStore = defineStore('messages', () => {
   // Build Sentences
   async function generateSentencesFromWords(words) {
     const command = `Given the following list of words, generate between 3-5 sentences that the assistant 
-    might be trying to say. Keep them generic:\n${words}`
+    might be trying to say. Keep them generic but use all the words:\n${words}`
     sentenceSuggestions.value = await client.getResponse(messageHistory.value, command, currentContext.value,
       false, true)
     activeEditHistory.value = activeEditHistory.value.concat([

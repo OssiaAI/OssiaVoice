@@ -13,7 +13,7 @@ const showOpenAIKey = ref(false)
   <div id="overlay-container">
     <div id="overlay">
       <div id="scrollable">
-        <h2 id="title">Welcome to Ossia</h2>
+        <h2 class="title">Welcome to Ossia</h2>
         <div class="group-content">
           <h3 class="subheading">What is Ossia?</h3>
           <iframe id="video-embed" width="560" height="315"
@@ -22,12 +22,13 @@ const showOpenAIKey = ref(false)
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <h2 id="title">Settings</h2>
+        <h2 class="title">Settings</h2>
         <div class="group-content">
-          <h3 class="subheading">OpenAI API Key</h3>
+          <h3 class="subheading"><span style="color: red">*</span> OpenAI API Key</h3>
           <span>
         Ossia is built on top of ChatGPT. You need an OpenAI account to use Ossia, as you would if you were using ChatGPT
-        normally. Visit their website <a href="https://platform.openai.com/api-keys">here</a> to generate a personal account key
+        normally. Visit their website <a href="https://platform.openai.com/api-keys">here</a> to generate a personal account key.
+            We suggest also setting spending limits to control your spend with OpenAI.
         </span>
           <div id="api-key-input-wrapper">
             <v-text-field id="api-key-input"
@@ -35,29 +36,45 @@ const showOpenAIKey = ref(false)
                           @click:append-inner="showOpenAIKey = !showOpenAIKey"
                           :type="showOpenAIKey ? 'text' : 'password'"
                           v-model="settingsStore.openAIAPIKey"
-                          label="Do not share this key (e.g. sf-lx3l5DaIyg... )"/>
+                          label="Do not share this key. E.g. sf-lx3l5DaIyg..."/>
             <strong id="important">Important!</strong> You will be charged for each request Ossia makes to ChatGPT -
             do not share your key with anyone! (We cannot and do not store your key - see the video for details)
           </div>
         </div>
         <div class="group-content">
-          <h3 class="subheading">User Backstory</h3>
+          <h3 class="subheading"><span style="color: red">*</span> User Backstory</h3>
           Describe the user in as much detail as possible. e.g. name, hobbies, political leaning, temperament, family
           and close friends etc.
-          <span id="example" @click="settingsStore.backstory = settingsStore.exampleBackstory">Or use an example</span>
+          <span id="example-link" @click="settingsStore.backstory = settingsStore.exampleBackstory">Or use an example</span>
           <div id="backstory-input-wrapper">
             <v-textarea id="backstory-input" label="user backstory" v-model="settingsStore.backstory" hide-details/>
           </div>
         </div>
         <div class="group-content">
-          <h3 class="subheading">Terms & Conditions and Cookies </h3>
+          <h3 class="subheading"><span style="color: red">*</span> Terms & Conditions and Cookies </h3>
           <v-checkbox v-model="settingsStore.liabilityAgreement" label="I agree that by using this software in beta I am doing so
          entirely at my own risk. This website is intended entirely for testing, as a proof of concept, and I
          therefore do not hold Ossia, or anyone who has contributed to Ossia individually liable for any repercussions
-         of its use. I agree that the data I enter to this site will be shared with OpenAI for generation."/>
+         of its use. I agree that the data I enter to this site can be shared with OpenAI through ChatGPT prompts."/>
           <v-checkbox v-model="settingsStore.cookieAgreement" label="We use cookies and local storage purely to aid your experience; by
-         saving your settings and data only locally to your device, we have no need to collect any personal data
+         saving your settings and data locally to your device, we have no need to collect any personal data
          ourselves. By ticking this box I accept the use of cookies and local storage."/>
+        </div>
+        <h2 class="title">Contact & About</h2>
+        <div class="group-content">
+          Ossia was developed by James Arney as a concept for interacting using AI, for those who need it
+          most. Thoughts, ideas and contributions are very much welcomed. Please reach out if you would like to be
+          involved!
+          <div id="contact-links">
+            <a href="https://twitter.com/arneyjfs" rel="noopener noreferrer"
+               target="_blank"><v-icon>mdi-twitter</v-icon></a>
+            <a href="https://github.com/OssiaAI/OssiaVoice" rel="noopener noreferrer"
+               target="_blank"><v-icon>mdi-github</v-icon></a>
+            <a href="https://www.linkedin.com/in/james-arney-50246711a/" rel="noopener noreferrer"
+               target="_blank"><v-icon>mdi-linkedin</v-icon></a>
+          </div>
+
+          © James Arney, 2024
         </div>
       </div>
       <v-btn
@@ -101,7 +118,7 @@ const showOpenAIKey = ref(false)
   display: flex;
 }
 
-#title {
+.title {
   color: darken(theme.$primary, 10%);
   margin: 10px 0 0 10px;
 }
@@ -155,10 +172,16 @@ a {
   color: darken(theme.$primary, 10%);
 }
 
-#example {
+#example-link {
   color: darken(theme.$primary, 10%);
   cursor: pointer;
   width: fit-content;
+}
+
+#contact-links {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0px;
 }
 
 #save-btn {
