@@ -95,7 +95,6 @@ const settingStore = useSettingsStore()
   width: 50%;
   min-width: 300px;
   max-width: 550px;
-  overflow: auto;
 }
 
 #message-history {

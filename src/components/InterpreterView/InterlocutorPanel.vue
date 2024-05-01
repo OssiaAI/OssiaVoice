@@ -71,6 +71,7 @@ function submitInterlocutorMessage() {
   align-items: center;
   align-content: center;
   position: relative;
+  overflow: auto;
 }
 
 #toolbar {

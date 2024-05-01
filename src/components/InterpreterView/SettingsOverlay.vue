@@ -221,7 +221,7 @@ a {
 
 #complete-later-btn {
   background: #e1e1e1;
-  width: 150px;
+  width: 130px;
   height: 40px;
   margin: 10px 10px 0 20px;
   text-transform: none;
@@ -233,7 +233,7 @@ a {
 
 #save-btn {
   background: theme.$primary;
-  width: 130px;
+  width: 115px;
   height: 40px;
   margin: 10px 20px 0 10px;
   text-transform: none;
