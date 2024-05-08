@@ -171,6 +171,7 @@ function editAllMessages() {
 .message-suggestion {
   background-color: theme.$background;
   box-sizing: content-box;
+  text-align: center;
   color: theme.$text-color-inverted;
   height: fit-content(20%);
   max-width: 33%;
