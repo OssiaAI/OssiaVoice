@@ -1,6 +1,7 @@
 <script setup>
 import {useSettingsStore} from "@/stores/SettingsStore.js";
 import {ref} from "vue";
+import ossiaIntroThumbnail from '@/assets/ossia-intro-thumbnail.png'
 
 const settingsStore = useSettingsStore()
 
@@ -19,11 +20,15 @@ const showOpenAIKey = ref(false)
         <h2 class="title">Welcome to Ossia</h2>
         <div class="group-content">
           <h3 class="subheading">What is Ossia?</h3>
-          <iframe id="video-embed" width="560" height="315"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=XLleE46-lBIZBRWb" title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <!--          <iframe id="video-embed" width="560" height="315"-->
+          <!--                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=XLleE46-lBIZBRWb" title="YouTube video player"-->
+          <!--                  frameborder="0"-->
+          <!--                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"-->
+          <!--                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
+          <v-img
+              id="video-embed-tmp"
+              :src="ossiaIntroThumbnail"
+          ></v-img>
         </div>
         <h2 class="title">Settings</h2>
         <div class="group-content">
@@ -145,7 +150,7 @@ const showOpenAIKey = ref(false)
   margin: 10px 0 0 10px;
 }
 
-#accept-terms-prompt{
+#accept-terms-prompt {
   background: orange;
   border-radius: 5px;
   padding: 10px;
@@ -189,6 +194,16 @@ const showOpenAIKey = ref(false)
   margin: auto;
   max-width: 100%;
   height: 26vw;
+  min-height: 200px;
+  max-height: 350px;
+  align-self: center;
+}
+
+#video-embed-tmp {
+  margin: auto;
+  max-width: 100%;
+  height: 26vw;
+  aspect-ratio: 16/9;
   min-height: 200px;
   max-height: 350px;
   align-self: center;
