@@ -3,7 +3,7 @@ import {useLoadingStore} from "@/stores/LoadingStore.js";
 import {useSettingsStore} from "@/stores/SettingsStore.js";
 import {AlertStore} from "@/stores/AlertStore.js";
 
-const model = "gpt-4-turbo-preview" // "gpt-4-turbo-preview" // "gpt-3.5-turbo-0125" //
+const model = "gpt-4o" // "gpt-4-turbo"
 
 export async function getResponse(messageHistory, command, wordLoading = false,
                                   sentenceLoading = false) {
