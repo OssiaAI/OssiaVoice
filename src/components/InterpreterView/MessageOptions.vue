@@ -9,13 +9,11 @@ function submitMessage(sentence, hint) {
     messageStore.editSingleResponseWithHint(sentence, hint)
     messageStore.generateWordsForSingleResponseFromHint(sentence, hint)
     messageStore.editInstruction = null
-  }
-  else if (sentence) {
+  } else if (sentence) {
     messageStore.messageHistory.push({role: "assistant", content: sentence})
     speak(sentence)
     messageStore.activeEditHistory = []
-  }
-  else if (hint) {
+  } else if (hint) {
     messageStore.generateWordSuggestionsFromHint(hint)
     messageStore.generateSentenceSuggestionsFromHint(hint)
   }
@@ -70,15 +68,15 @@ function editAllMessages() {
            tabindex="0">
         {{ sentence }}
       </div>
-        <span v-if="messageStore.editInstruction"
-              class="message-action-btn message-suggestion raised"
-              @click.stop="editAllMessages">
+      <span v-if="messageStore.editInstruction"
+            class="message-action-btn message-suggestion raised"
+            @click.stop="editAllMessages">
           <v-icon icon="mdi-pencil"/>
           Edit all
         </span>
-        <span v-if="messageStore.editInstruction"
-              class="message-action-btn message-suggestion raised"
-              @click.stop="messageStore.editInstruction = null">
+      <span v-if="messageStore.editInstruction"
+            class="message-action-btn message-suggestion raised"
+            @click.stop="messageStore.editInstruction = null">
           <v-icon icon="mdi-close"/>
         </span>
     </div>
@@ -106,25 +104,27 @@ function editAllMessages() {
   margin-left: -80px;
 }
 
-#magic-icon{
+#magic-icon {
   color: black;
   padding: 18px;
 
   &:hover {
     color: darken(theme.$primary, 5%);
   }
+
   &:active {
     color: darken(theme.$primary, 10%);
   }
 }
 
-#send-icon{
+#send-icon {
   color: theme.$primary;
   padding: 18px;
 
   &:hover {
     color: darken(theme.$primary, 5%);
   }
+
   &:active {
     color: darken(theme.$primary, 10%);
   }
@@ -135,6 +135,7 @@ function editAllMessages() {
   width: 100%;
   display: flex;
   justify-items: stretch;
+
   &:deep(input) {
     padding-right: 85px;
   }
