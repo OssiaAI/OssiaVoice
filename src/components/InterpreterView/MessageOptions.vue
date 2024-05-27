@@ -45,19 +45,27 @@ function editAllMessages() {
       >
       </v-text-field>
       <div id="icons-wrapper">
+        <v-tooltip text="Use as Hint">
+          <template v-slot:activator="{ props }">
+            <v-icon
+                class="message-icon"
+                v-bind="props"
+                id="magic-icon"
+                icon="mdi-auto-fix"
+                @click.stop="submitMessage(null, messageStore.scriberPhrase); messageStore.scriberPhrase = ''"
+            />
+          </template>
+        </v-tooltip>
         <v-icon
             class="message-icon"
-            id="magic-icon"
-            icon="mdi-auto-fix"
-            @click.stop="submitMessage(null, messageStore.scriberPhrase); messageStore.scriberPhrase = ''"/>
-        <v-icon
-            class="message-icon"
+            v-bind="props"
             id="send-icon"
             icon="mdi-send"
-            @click.stop="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''"/>
+            @click.stop="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''"
+        />
       </div>
     </div>
-    <em id="editInstruction" v-if="messageStore.editInstruction" >
+    <em id="editInstruction" v-if="messageStore.editInstruction">
       {{ messageStore.editInstruction }}
       <br/>
       Select one or 'edit all' to apply</em>
