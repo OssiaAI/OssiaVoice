@@ -8,7 +8,7 @@ export const useMessageStore = defineStore('messages', () => {
   const messageHistory = ref([])
   const activeEditHistory = ref([])
   const wordSuggestions = ref([
-    'hi', 'how', 'you', 'weather', 'nice', 'hungry', 'dinner', 'today', 'weather', 'i',
+    'hi', 'how', 'you', 'weather', 'nice', 'hungry', 'dinner', 'today', 'i',
     'work', 'rugby', 'jazz', 'cold', 'warm', 'thirsty', 'bored', 'good'])
   const previousWordSuggestions = ref([])
   const sentenceSuggestions = ref([
