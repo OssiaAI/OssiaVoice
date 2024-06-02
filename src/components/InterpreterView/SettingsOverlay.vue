@@ -48,9 +48,7 @@ onMounted(() => {
           <br>
           Ossia is an accessibility tool for those unable to speak or type;
           Ossia enables whole sentence creation with as few clicks as possible and targets less than 1 word typed per
-          sentence.
-          <br>
-          Watch the introduction video above to find out more
+          sentence. Watch the introduction video above to find out more.
         </div>
         <div class="group-content">
           <h3 class="subheading">Getting Started</h3>
