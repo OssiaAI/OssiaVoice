@@ -14,7 +14,7 @@ const model = defineModel()
 const emit = defineEmits(['textAvailable'])
 const continuous = false
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition()
 
 recognition.continous = false

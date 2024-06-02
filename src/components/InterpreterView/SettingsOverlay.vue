@@ -1,34 +1,68 @@
 <script setup>
 import {useSettingsStore} from "@/stores/SettingsStore.js";
-import {ref} from "vue";
-import ossiaIntroThumbnail from '@/assets/ossia-intro-thumbnail.png'
+import {onMounted, ref} from "vue";
 
 const settingsStore = useSettingsStore()
 
 const emit = defineEmits(['close'])
 const showOpenAIKey = ref(false)
 
+const isChrome = ref(true)
+const isDesktop = ref(true)
+
+const closeAPIWarning = ref(false)
+const closeBrowserWarning = ref(false)
+
+onMounted(() => {
+  isChrome.value = !!window.chrome
+  isDesktop.value = screen.width > 1000
+  console.log("ischromedesktop", isChrome.value, isDesktop.value)
+})
+
 </script>
 
 <template>
   <div id="overlay-container">
     <div id="overlay">
-      <div id="accept-terms-prompt" v-if="settingsStore.showSettingsWarning">
+      <div id="accept-terms-prompt" class="raised" v-if="(settingsStore.showSettingsWarning) && !closeAPIWarning">
+        <v-icon size="30" color="#555555" id="api-warning" icon="mdi-alert"></v-icon>
+        <v-icon class="close-btn" icon="mdi-close" @click="closeAPIWarning=true"></v-icon>
         You must enter an OpenAI API Key (and accept the terms and conditions) before Ossia Voice can do anything smart!
+      </div>
+      <div id="browser-check" class="raised" v-if="!(isChrome && isDesktop) && !closeBrowserWarning">
+        <v-img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg"/>
+        <v-icon class="close-btn" icon="mdi-close" @click="closeBrowserWarning=true"></v-icon>
+        <strong>Use chrome on desktop</strong>
+        <br>
+        Ossia is designed to be used on large screens and is currently only tested on the Chrome browser. Please switch
+        to Chrome on a laptop or tablet for the best experience.
       </div>
       <div id="scrollable">
         <h2 class="title">Welcome to Ossia</h2>
         <div class="group-content">
           <h3 class="subheading">What is Ossia?</h3>
-          <!--          <iframe id="video-embed" width="560" height="315"-->
-          <!--                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=XLleE46-lBIZBRWb" title="YouTube video player"-->
-          <!--                  frameborder="0"-->
-          <!--                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"-->
-          <!--                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
-          <v-img
-              id="video-embed-tmp"
-              :src="ossiaIntroThumbnail"
-          ></v-img>
+          <v-chip label style="width: max-content" href="https://www.youtube.com/watch?v=nToQzEFunO0">
+            <v-icon icon="mdi-youtube" color="red" start></v-icon>
+            Ossia Voice - First Look
+          </v-chip>
+          <br>
+          Ossia is an accessibility tool for those unable to speak or type;
+          Ossia enables whole sentence creation with as few clicks as possible and targets less than 1 word typed per
+          sentence.
+          <br>
+          Watch the introduction video above to find out more
+        </div>
+        <div class="group-content">
+          <h3 class="subheading">Getting Started</h3>
+          This video explains how to get started with the tool
+          <br>
+          <br>
+          <iframe id="video-embed"
+                  src="https://www.youtube.com/embed/36bA1Bz8db0?si=lISQpcvMYMBPvB3P" title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; clipboard-write; encrypted-media;
+                  gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <h2 class="title">Settings</h2>
         <div class="group-content">
@@ -151,11 +185,33 @@ const showOpenAIKey = ref(false)
 }
 
 #accept-terms-prompt {
-  background: orange;
+  background: #ffbb42;
   border-radius: 5px;
   padding: 10px;
   margin: 5px;
   text-align: center;
+  & > #api-warning {
+    float: left;
+    margin: 5px
+  }
+}
+
+#browser-check {
+  background: #a6d1ff;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+  & > .v-img {
+    width: 40px;
+    float: left;
+    margin: 5px
+  }
+}
+
+.close-btn {
+  float: right;
+  cursor: pointer;
 }
 
 #scrollable {
@@ -192,20 +248,10 @@ const showOpenAIKey = ref(false)
 
 #video-embed {
   margin: auto;
-  max-width: 100%;
   height: 26vw;
-  min-height: 200px;
-  max-height: 350px;
-  align-self: center;
-}
-
-#video-embed-tmp {
-  margin: auto;
-  max-width: 100%;
-  height: 26vw;
-  aspect-ratio: 16/9;
-  min-height: 200px;
-  max-height: 350px;
+  width: 47vw;
+  max-height: 253px;
+  max-width: 450px;
   align-self: center;
 }
 
@@ -226,7 +272,7 @@ a {
 #contact-links {
   display: flex;
   gap: 10px;
-  padding: 10px 0px;
+  padding: 10px 0;
 }
 
 #bottom-buttons {
@@ -240,10 +286,6 @@ a {
   height: 40px;
   margin: 10px 10px 0 20px;
   text-transform: none;
-
-  //&:deep(span) {
-  //  color: theme.$text-color;
-  //}
 }
 
 #save-btn {
@@ -277,6 +319,13 @@ a {
     &:active {
       filter: brightness(95%)
     }
+  }
+}
+
+@media screen and (max-width: 600px), (max-height: 770px) {
+  #video-embed {
+    height: 36vw;
+    width: 65vw;
   }
 }
 

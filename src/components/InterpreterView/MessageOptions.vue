@@ -58,7 +58,6 @@ function editAllMessages() {
         </v-tooltip>
         <v-icon
             class="message-icon"
-            v-bind="props"
             id="send-icon"
             icon="mdi-send"
             @click.stop="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''"
