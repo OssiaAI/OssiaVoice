@@ -30,7 +30,7 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   async function generateWords() {
-    const command = `Given the conversation history, generate a short list of key words and connector words or 
+    const command = `Given the conversation history, generate a short list of key words or 
     very short phrases the assistant can select from to build a new sentence`
     wordSuggestions.value = await getResponse(messageHistory.value, command, true, false)
   }
@@ -54,14 +54,14 @@ export const useMessageStore = defineStore('messages', () => {
 
   // New Sentence
   async function generateWordSuggestionsFromNewTopic(topic) {
-    const command = `Ignore all previous conversation. Generate a short list of key words and connector words 
-      the assistant can select from to build a new sentence, based around a new topic: '${topic}'`
+    const command = `Ignore all previous conversation. Generate a short list of key words 
+      the assistant can select from to build a new sentence, based around this new topic: '${topic}'`
     wordSuggestions.value = await getResponse(messageHistory.value, command, true, false)
   }
 
   async function generateSentenceSuggestionsFromNewTopic(topic) {
     const command = `Ignore all previous conversation. Generate a list of 3 to 5 short generic sentences the 
-      assistant may want to say, based around a new topic: '${topic}'`
+      assistant may want to say, based around this new topic: '${topic}'`
     sentenceSuggestions.value = await getResponse(messageHistory.value, command, false, true)
     activeEditHistory.value = activeEditHistory.value.concat([
       {role: "system", content: command},
@@ -82,8 +82,8 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   async function generateWordsForSingleResponseFromHint(response, hint) {
-    const command = `The response '${response}' was close. Generate a short list of key words and connector 
-    words or very short phrases the assistant can select from to build a similar sentence, based on the hint: '${hint}'`
+    const command = `The response '${response}' was close. Generate a short list of key words or 
+    very short phrases the assistant can select from to build a similar sentence, based on the hint: '${hint}'`
     const messages = messageHistory.value.concat(activeEditHistory.value)
     wordSuggestions.value = await getResponse(messages, command, true, false)
   }
@@ -100,7 +100,7 @@ export const useMessageStore = defineStore('messages', () => {
 
   async function generateWordsForAllResponsesFromHint(hint) {
     const command = `None of those suggestions were very useful. This time, instead of full sentences, generate 
-    a short list of key words and connector words or very short phrases, that the assistant can select from to build 
+    a short list of key words or very short phrases, that the assistant can select from to build 
     alternative sentences. Here is a hint to help guide you: '${hint}'`
     const messages = messageHistory.value.concat(activeEditHistory.value)
     wordSuggestions.value = await getResponse(messages, command, true, false)
@@ -118,7 +118,7 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   async function generateWordSuggestionsFromHint(hint) {
-    const command = `Given the conversation history, generate a short list of key words and connector words or 
+    const command = `Given the conversation history, generate a short list of key words or 
     very short phrases the assistant can select from to build a new sentence, based on the hint: '${hint}'`
     wordSuggestions.value = await getResponse(messageHistory.value, command, true, false)
   }
