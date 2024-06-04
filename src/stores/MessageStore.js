@@ -47,8 +47,8 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   async function generateMoreWordsFromWords(words) {
-    const command = `Given the following list of words, generate another list of related words that the 
-    assistant could select from to build a sentence:\n${words}`
+    const command = `Given the following list of words and the conversation history, generate another 
+    list of related words that the assistant could select from to build a sentence:\n${words}`
     wordSuggestions.value = await getResponse(messageHistory.value, command, true, false)
   }
 
