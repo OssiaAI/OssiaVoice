@@ -13,5 +13,6 @@ Experience it for yourself at [ossiavoice.com](https://ossiavoice.com/)
   If these terms do not suit your needs, please reach out for suitable collaboration
 
 ## Contributor Agreement
-  Any contributor, by adding to or adapting the contents of this repository, accepts that OssiaAI retains full ownership over it's contents. This is necessary to prevent ownership ambiguity and no one being able to contribute (including the original author). See here: https://choosealicense.com/no-permission/
-
+  **The following agreement is required to prevent ownership ambiguity as described [here](https://choosealicense.com/no-permission/). Such ambiguity leads to no one being able to contribute to the project (including the original author) (which would be very bad):**
+  
+  Any contributor, by adding to or adapting the contents of this repository, accepts that the original author (@arneyjfs) retains full ownership over it's contents
