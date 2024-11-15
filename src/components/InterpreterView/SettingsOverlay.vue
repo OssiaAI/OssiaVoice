@@ -41,10 +41,13 @@ onMounted(() => {
         <h2 class="title">Welcome to Ossia</h2>
         <div class="group-content">
           <h3 class="subheading">What is Ossia?</h3>
-          <v-chip label style="width: max-content" href="https://www.youtube.com/watch?v=nToQzEFunO0">
-            <v-icon icon="mdi-youtube" color="red" start></v-icon>
-            Ossia Voice - First Look
-          </v-chip>
+          <iframe
+              id="video-embed"
+              src="https://www.youtube.com/embed/j2f9vKNX0zY?si=qvjsXR88OEMXUTFO"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+              gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           <br>
           Ossia is an accessibility tool for those unable to speak or type;
           Ossia enables whole sentence creation with as few clicks as possible and targets less than 1 word typed per
@@ -55,12 +58,11 @@ onMounted(() => {
           This video explains how to get started with the tool
           <br>
           <br>
-          <iframe id="video-embed"
-                  src="https://www.youtube.com/embed/36bA1Bz8db0?si=lISQpcvMYMBPvB3P" title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; clipboard-write; encrypted-media;
-                  gyroscope; picture-in-picture; web-share"
-                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <v-chip label style="width: max-content" href="https://www.youtube.com/watch?v=36bA1Bz8db0"
+                  target="_blank" rel="noopener noreferrer">
+            <v-icon icon="mdi-youtube" color="red" start></v-icon>
+            Ossia Voice - Getting Started
+          </v-chip>
         </div>
         <h2 class="title">Settings</h2>
         <div class="group-content">
@@ -188,6 +190,7 @@ onMounted(() => {
   padding: 10px;
   margin: 5px;
   text-align: center;
+
   & > #api-warning {
     float: left;
     margin: 5px
@@ -200,6 +203,7 @@ onMounted(() => {
   padding: 10px;
   margin: 5px;
   text-align: center;
+
   & > .v-img {
     width: 40px;
     float: left;

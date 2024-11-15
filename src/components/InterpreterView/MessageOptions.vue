@@ -38,8 +38,7 @@ function editAllMessages() {
           hide-details
           id="message-input"
           v-model="messageStore.scriberPhrase"
-          @keydown.enter="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''
-"
+          @keydown.enter="submitMessage(messageStore.scriberPhrase); messageStore.scriberPhrase = ''"
           density="comfortable"
           style="max-width: 100%"
       >
