@@ -5,7 +5,10 @@ import micHoverImg from '@/assets/mic-button/mic-hover.svg';
 import micActiveImg from '@/assets/mic-button/mic-active.svg';
 import { useAlertStore } from "@/stores/AlertStore.js";
 import { useSettingsStore } from "@/stores/SettingsStore.js";
-import { pipeline } from "@huggingface/transformers";
+import { pipeline, AutoProcessor, AutoModelForAudioFrameClassification, read_audio } from "@huggingface/transformers";
+
+let segmentationProcessor = null;
+let segmentationModel = null;
 
 /**
  * Limits the rate at which a function can fire
@@ -32,6 +35,164 @@ function throttle(func, limit) {
       }, limit - (Date.now() - lastRan));
     }
   };
+}
+// Helper Functions
+/**
+ * Filters and enhances diarization segments
+ * @param {Array} diarization - Raw diarization segments from model
+ * @returns {Array} Filtered (confidence >= 0.8) and processed diarization segments
+ */
+function preprocessDiarization(diarization) {
+  return diarization
+    .filter(segment => segment.end - segment.start >= 0.5)
+    .filter(segment => segment.confidence >= 0.8)
+    .map(segment => ({
+      ...segment,
+      label: segment.label || `Speaker_${segment.id}`
+    }));
+}
+
+/**
+ * Merges transcription and diarization results
+ * @param {Object} transcription - Whisper transcription result
+ * @param {Array} diarization - Speaker diarization segments
+ * @returns {Object} Combined results with formatted text and segments
+ */
+function mergeResults(transcription, diarization) {
+  const validSegments = preprocessDiarization(diarization);
+
+  const formattedSegments = transcription.chunks.reduce((acc, chunk) => {
+    const speaker = findOptimalSpeaker(chunk.timestamp, validSegments);
+    return mergeSegments(acc, chunk, speaker);
+  }, []);
+
+  return {
+    formattedText: generateReadableText(formattedSegments),
+    segments: formattedSegments,
+    rawData: { diarization, transcription }
+  };
+}
+
+/**
+ * Finds the most appropriate speaker for a given time chunk
+ * @param {Array} timestamp - [start, end] timestamps for the chunk
+ * @param {Array} segments - Available speaker segments
+ * @returns {string} Speaker label for the chunk
+ */
+function findOptimalSpeaker([start, end], segments) {
+  // Case 1: Find segments that completely contain this chunk
+  const containingSegments = segments.filter(
+    segment => segment.start <= start && segment.end >= end
+  );
+  if (containingSegments.length === 1) {
+    return containingSegments[0].label;
+  }
+  
+  if (containingSegments.length > 1) {
+    console.log('Mode1:', containingSegments.length);
+    // If multiple segments contain this chunk, use the one with highest confidence
+    return containingSegments.reduce((best, current) => 
+      current.confidence > best.confidence ? current : best
+    ).label;
+  }
+  
+  // Case 2: Find segments with meaningful overlap
+  const overlapThreshold = 0.65; 
+  const chunkDuration = end - start;
+  
+  const overlappingSegments = segments.filter(segment => {
+    const overlapStart = Math.max(start, segment.start);
+    const overlapEnd = Math.min(end, segment.end);
+    const overlapDuration = Math.max(0, overlapEnd - overlapStart);
+    console.log('Mode2:', overlapDuration);
+    return overlapDuration / chunkDuration >= overlapThreshold;
+  });
+  
+  if (overlappingSegments.length > 0) {
+    return overlappingSegments.reduce((best, current) => 
+      current.confidence > best.confidence ? current : best
+    ).label;
+  }
+  
+  // Case 3: Fall back to midpoint distance method
+  const chunkMid = (start + end) / 2;
+  let bestMatch = null;
+  let minDistance = Infinity;
+
+  for (const segment of segments) {
+    const segmentMid = (segment.start + segment.end) / 2;
+    const distance = Math.abs(segmentMid - chunkMid);
+    
+    if (distance < minDistance) {
+      minDistance = distance;
+      bestMatch = segment;
+    }
+    
+  }
+  console.log('Mode3:', minDistance);
+  return bestMatch?.label || 'Speaker';
+}
+
+/**
+ * Merges consecutive segments from the same speaker
+ * @param {Array} acc - Accumulated segments
+ * @param {Object} chunk - Current chunk to process
+ * @param {string} speaker - Speaker label
+ * @returns {Array} Updated segments array
+ */
+function mergeSegments(acc, chunk, speaker) {
+  const last = acc[acc.length - 1];
+  const newSegment = {
+    start: chunk.timestamp[0],
+    end: chunk.timestamp[1],
+    text: chunk.text.trim(),
+    speaker
+  };
+
+  if (last && last.speaker === speaker && (chunk.timestamp[0] - last.end < 1.5)) {
+    last.text += ` ${newSegment.text}`;
+    last.end = newSegment.end;
+    return acc;
+  }
+  return [...acc, newSegment];
+}
+
+/**
+ * Generates human-readable text from processed segments
+ * @param {Array} segments - Speaker segments with text
+ * @returns {string} Formatted text with speaker labels
+ */
+function generateReadableText(segments) {
+  return segments.map(s => `${s.speaker}: ${s.text}`).join('\n\n');
+}
+
+// Speaker Segmentation Processing
+/**
+ * Processes audio for speaker diarization
+ * @param {Blob} audioBlob - The recorded audio blob to process
+ * @returns {Promise<Array>} Array of speaker segments with timing information
+ */
+async function processDiarization(audioBlob) {
+  try {
+    // First, convert the blob to an ArrayBuffer
+    const audioUrld = URL.createObjectURL(audioBlob);
+
+    const processedAudio = await read_audio(audioUrld,segmentationProcessor.feature_extractor.config.sampling_rate);
+    
+    const inputs = await segmentationProcessor(processedAudio);
+
+    const { logits } = await segmentationModel(inputs);
+    
+    const diarization = segmentationProcessor.post_process_speaker_diarization(
+      logits,
+      processedAudio.length
+    )[0];
+    
+    return diarization;
+  } catch (error) {
+    console.error('Diarization error:', error);
+    return [];
+  }
 }
 
 /**
@@ -124,7 +285,21 @@ onMounted(async () => {
   } catch (error) {
     alertStore.showAlert("error", "Model Load Failed", error.message);
   } 
-  loadProgress.value = 99;
+  try {
+    loadProgress.value = 60;
+    segmentationProcessor = await AutoProcessor.from_pretrained('onnx-community/pyannote-segmentation-3.0');
+    console.log('Segmentation Processor Loaded');
+    
+    loadProgress.value = 80;
+    segmentationModel = await AutoModelForAudioFrameClassification.from_pretrained(
+      'onnx-community/pyannote-segmentation-3.0', 
+      { device: 'wasm', dtype: 'fp32' }
+    );
+    console.log('Segmentation Model Loaded');
+  } catch (error) {
+    alertStore.showAlert("error", "Segmentation Model Load Failed", error.message);
+  }
+  loadProgress.value = 90;
   try {
     console.group('[Main] Initialization start');
     loadProgress.value = 1;    
@@ -341,6 +516,7 @@ async function stopRecording() {
       // Calculate total length
       const totalLength = completeAudioData.reduce((sum, buf) => sum + buf.length, 0);
       fullAudio = new Float32Array(totalLength);
+
       
       // Merge all fragments
       let offset = 0;
@@ -354,10 +530,50 @@ async function stopRecording() {
         try {
           console.log("[Main] Processing complete audio with pipeline...");
           isProcessing_normalpipeline.value = true;
-          const result = await transcriber(fullAudio);
-          const finalText = filterText(result.text || '');
-          console.log(`[Main] Pipeline complete result: "${finalText}"`);
-          model.value = finalText;
+          
+          // Convert Float32Array to WAV Blob
+          const audioBlob = await float32ArrayToWavBlob(fullAudio);
+          const audioUrl = URL.createObjectURL(audioBlob);
+          
+          const [transcription, diarization] = await Promise.all([
+            transcriber(audioUrl, {
+              return_timestamps: 'word',
+            }),
+            processDiarization(audioBlob)
+          ]);
+
+          // Debug logging for Whisper transcription results
+          console.log('======= WHISPER TRANSCRIPTION RESULTS =======');
+          console.log('Full text:', transcription.text);
+          console.log('Number of chunks:', transcription.chunks.length);
+          console.log('===========================================');
+
+          // Debug logging for pyannote-segmentation diarization results
+          console.log('======= PYANNOTE DIARIZATION RESULTS =======');
+          console.log('Number of segments:', diarization.length);
+          if (diarization.length > 0) {
+            console.log('First 5 segments:', diarization.slice(0, 5));
+            console.log('Last 5 segments:', diarization.slice(-5));
+            
+            // Calculate total duration and speaker stats
+            const totalDuration = diarization.reduce((sum, seg) => sum + (seg.end - seg.start), 0);
+            const speakerCounts = diarization.reduce((counts, seg) => {
+              counts[seg.id] = (counts[seg.id] || 0) + 1;
+              return counts;
+            }, {});
+            
+            console.log('Total audio duration from segments:', totalDuration);
+            console.log('Speaker distribution:', speakerCounts);
+          } else {
+            console.log('No diarization segments found!');
+          }
+          console.log('===========================================');
+
+          const validSegments = preprocessDiarization(diarization);
+          console.log('After preprocessing:', validSegments.length, 'valid segments');
+          
+          const mergedResults = mergeResults(transcription, diarization);
+          model.value = mergedResults.formattedText;
           emit("textAvailable");
           isProcessing_normalpipeline.value = false;
         } catch (error) {
@@ -378,7 +594,68 @@ async function stopRecording() {
     handleError("Stop recording failed", error);
   }
 }
+/**
+ * Converts a Float32Array to a WAV Blob
+ * @param {Float32Array} float32Array - Audio data
+ * @returns {Promise<Blob>} - Audio blob in WAV format
+ */
+async function float32ArrayToWavBlob(float32Array) {
+  // WAV file format specifications
+  const numChannels = 1; // Mono
+  const sampleRate = WHISPER_SR;
+  const bitsPerSample = 16;
+  const bytesPerSample = bitsPerSample / 8;
+  const blockAlign = numChannels * bytesPerSample;
+  const byteRate = sampleRate * blockAlign;
+  const dataSize = float32Array.length * bytesPerSample;
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
 
+  // WAV header (44 bytes total)
+  // "RIFF" chunk descriptor
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true); // ChunkSize
+  writeString(view, 8, 'WAVE');
+
+  // "fmt " sub-chunk
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
+  view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+
+  // "data" sub-chunk
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  // Write audio data
+  const volume = 0.8; // Adjust volume as needed
+  let offset = 44;
+  for (let i = 0; i < float32Array.length; i++) {
+    // Convert float32 sample to int16
+    const sample = Math.max(-1, Math.min(1, float32Array[i])); // Clamp between -1 and 1
+    const int16Sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+    view.setInt16(offset, int16Sample * volume, true); // true for little-endian
+    offset += 2;
+  }
+
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+/**
+ * Helper function to write strings to DataView
+ * @param {DataView} view - DataView to write to
+ * @param {number} offset - Position to start writing
+ * @param {string} string - String to write
+ */
+function writeString(view, offset, string) {
+  for (let i = 0; i < string.length; i++) {
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+}
 /**
  * Reset UI elements and partial results 
  */
@@ -598,3 +875,5 @@ const micUnhover = () => !micActive.value && (micBtnImage.value = micImg);
   cursor: not-allowed;
 }
 </style>
+
+
